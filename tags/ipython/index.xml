@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ipython on </title>
+    <link>https://wildunix.es/tags/ipython/</link>
+    <description>Recent content in Ipython on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Thu, 31 Mar 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/ipython/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Instalar IPython mediante pip en Ubuntu y Mac OS X</title>
+      <link>https://wildunix.es/posts/instalar-ipython-mediante-pip-en-ubuntu-y-mac-os-x/</link>
+      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-ipython-mediante-pip-en-ubuntu-y-mac-os-x/</guid>
+      <description>Introducción Una vez que hemos decido no hacer frente a los gastos del uso legal de Mathematica y hemos desechado la ideas usar Maxima por las razones ya bien conocidas, una buena apuesta es llamar a la puerta de Python y servirse de las herramientas que se han derivado de él en la última década; nos referimos a sagemath e IPython.
+A la instalación de sagemath le hemos dedicado un instructivo post en Ubuntu Driver.</description>
+    </item>
+    
+  </channel>
+</rss>
