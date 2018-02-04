@@ -74,16 +74,18 @@ bien conocidas, una buena apuesta es llamar a la puerta de Python y
 servirse de las herramientas que se han derivado de él en la última
 década; nos referimos a sagemath e IPython.</p>
 
-<p>A la instalación de sagemath le hemos dedicado un instructivo post en
-Ubuntu Driver. A IPython le dedicaremos alguno pronto, pero hay una
-dificultad en su instalación que urge solventar.</p>
+<p>A la instalación de sagemath le hemos dedicado un
+<a href="https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/">post en Wildunix</a>. A
+IPython le dedicaremos alguno pronto, pero hay una dificultad en su
+instalación que urge solventar.</p>
 
 <p>No conocemos mejor directriz de instalación que la dada en la página
 oficial donde en el apartado &ldquo;I already have Python&rdquo;, dentro de la
 casuística de instalación sugiere el uso de pip (esta herramienta ha
-sido explicada en nuestro post titulado &ldquo;Mi Primera Clase de
-Python&rdquo;). Por supuesto que casi la totalidad del común de los usuario
-estará en esta situación, a saber, la de &ldquo;yo ya tengo Python&rdquo;.</p>
+sido explicada en nuestro post titulado
+&ldquo;<a href="https://wildunix.es/posts/mi-primera-clase-de-python/">Mi Primera Clase de Python</a>&rdquo;). Por
+supuesto que casi la totalidad del común de los usuario estará en esta
+situación, a saber, la de &ldquo;yo ya tengo Python&rdquo;.</p>
 
 <p>En este post hemos usado Python 3, tanto para Ubuntu como para Mac OS
 X. La razón es que presenta algunas facilidades para la instalación y,
@@ -118,6 +120,11 @@ sudo apt install python3-dev
 <p>y posteriormente instalar <code>g++</code>:</p>
 
 <pre><code>sudo apt install g++
+</code></pre>
+
+<p>En primer lugar instalaremos <code>python3-setuptools</code>:</p>
+
+<pre><code>sudo apt-get install python3-setuptools
 </code></pre>
 
 <p>Es posible que nuestro sistema no cuente aún con la herramienta
@@ -280,7 +287,7 @@ sudo pip install &quot;ipython[notebook]&quot;
 
 sudo apt install libfreetype6-dev
 
-sudo apt install pkg-config 
+sudo apt install pkg-config python3-tk
 
 sudo pip install matplotlib
 
