@@ -1,0 +1,39 @@
+baseURL = "https://wildunix.es"
+languageCode = "es-es"
+canonifyURLs = true
+lang = "es"
+theme = "steam"	
+buildDrafts = false
+
+[params]
+	title = "WildUnix"
+	copyright = "Licencia [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
+
+	# You can choose between green, orange, red and blue.
+	themecolor = "blue"
+
+	# Link custom assets relative to /static
+	favicon   = "favicon.ico"
+	customCSS = []
+	customJS  = []
+
+	# To provide some metadata for search engines and the about section in the footer
+	# feel free to add a few information about you and your
+	description = "Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell"
+	
+	# Link your social networks (optional)
+	location = ""
+	twitter = "wildunix"
+	linkedin = ""
+	googleplus = ""
+	facebook = ""
+	instagram = ""
+	github = "wildUnixBlog"
+	gitlab = ""
+	bitbucket = ""
+
+	# Customize or translate the strings
+	keepReadingStr = "Continuar leyendo"
+	backtotopStr = "Volver al principio"
+	shareStr = "Compartir"
+	pageNotFoundTitle = "404 - Page not found"	
