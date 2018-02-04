@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Instalar ELPA para Emacs 23 &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Instalar ELPA para Emacs 23</h1>
+        <div class="post-meta">
+            <time datetime="19 March 2016">
+                19 March 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Los usuarios de <code>Emacs</code> saben de su editor preferido varias cosas: la
+independencia que les ha proporcionado del ratón por vernir de un
+tiempo en el que se vivía sin ratón, la sensación de control pleno que
+les confiere, la potencia del mismo y también la dificultad de su
+configuración al ir un poquitín más allá de lo elemental.</p>
+
+<p>En particular es complicada la gestión de instalar complementos para
+<code>Emacs</code>. ¿Cuántas veces hemos recurrido a instalarlos mediante el
+gestor de paquetes del sistema operativo, lo cual es menos que ideal?
+El deseo de los usuarios de <code>Emacs</code> ha sido por largo tiempo disponer
+de un sistema gestor de paquetes como: <code>apt</code>, <code>yum</code>, <code>homebrew</code>,
+<code>pip</code>, etc. <code>Emacs 24</code> lo ha hecho finalmente; se llama
+<code>package.el</code>. <code>ELPA</code> es el acrónimo de &ldquo;Emacs Lisp Package Archive&rdquo;,
+escrito originalmente por <strong>Tom Tromey</strong>. Está incluida en <code>GnuEmacs</code>
+a partir de la versión 24. La biblioteca del gestor de paquetes para
+el <code>ELPA</code> es <code>package.el</code>.</p>
+
+<p>Pero ¿qué hay de <code>Emacs 23</code> y las versiones anteriores? Este post está
+dedicado a los usuarios, puede que administradores, que están usando
+<code>Emacs 23</code>, quizá porque están apurando una versión antigua de su
+sistema y no pueden cambiar a <code>Emacs 24</code> o quizá porque encuetran en
+la versión 23 algún rasgo que les interesa, etc. Explicaremos la
+inexplicada y sencilla labor de poner <code>package.el</code> a disposición de su
+<code>Emacs 23</code>.</p>
+
+<h2 id="descargar-package-el">Descargar <code>package.el</code></h2>
+
+<p>La descarga de la versión más reciente que conozco de <code>package.el</code>
+puede hacerse
+<a href="http://git.savannah.gnu.org/gitweb/?p=emacs.git;a=blob_plain;hb=ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09;f=lisp/emacs-lisp/package.el">de aquí</a>. Para
+ello se puede usar el botón derecho del ratón o hacer clic con dos
+dedos sobre el enlace y luego usar &lsquo;Guardar enlace como&hellip;&rsquo;. El
+resultado, si hacemos esto, será el fichero
+<code>lisp-emacs-lisp-package.el</code> que quedará albergado digamos, por
+ejemplo y para fijar ideas, en <code>Descargas</code> y representará la materia
+prima de nuestra labor.</p>
+
+<h2 id="instalación-de-package-el">Instalación de <code>package.el</code></h2>
+
+<p>La instalación tiene dos partes sencillas:</p>
+
+<ol>
+<li>crear el directorio <code>.emacs.d</code></li>
+<li>copia del fichero renombrado en el directorio <code>.emacs.d</code></li>
+<li>completación del fichero de configuración de <code>Emacs</code></li>
+</ol>
+
+<p>El directorio <code>.emacs.d</code> debería estar creado tras arrancar <code>Emacs</code> la
+primera vez; si no existe por lo que sea, lo podemos crear manualmente:</p>
+
+<pre><code>mdkir /home/suUsuario/.emacs.d
+</code></pre>
+
+<p>Si la descarga ha sido llevada a cabo según lo indicado, la copia del
+fichero puede hacerse con la orden:</p>
+
+<pre><code>mv /home/miUsuario/Descargas/lisp-emacs-lisp-package.el /home/miUsuario/.emacs.d/package.el
+</code></pre>
+
+<p>La operación estará concluida haciendo que el fichero <code>.emacs</code>, que
+debe figurar en el directorio raíz del usuario <code>miUsuario</code>, comience
+por el siguiente párrafo:</p>
+
+<pre><code>(require 'package)
+;; Any add to list for package-archives (to add marmalade or melpa) goes here, e.g.:
+(add-to-list 'package-archives 
+    '(&quot;marmalade&quot; .
+      &quot;https://marmalade-repo.org/packages/&quot;))
+(package-initialize)
+</code></pre>
+
+<p>Por supuesto que si el fichero <code>.emacs</code> no existe allí, debemos crearlo
+con cualquier editor, por ejemplo <code>nano</code> o el propio <code>Emacs</code>. En caso
+de que al arrancar <code>Emacs 23</code> aparezca un error del tipo:</p>
+
+<pre><code>Cannot load file, package...
+</code></pre>
+
+<p>entonces en lugar del código anterior debemos de incluir en <code>.emacs</code>
+éste otro:</p>
+
+<pre><code>(when
+    (load
+      (expand-file-name &quot;~/.emacs.d/package.el&quot;)))
+</code></pre>
+
+<h2 id="uso-de-package-el">Uso de <code>package.el</code></h2>
+
+<p>Para usar nuestra flamante instalación de <code>ElPA</code> no tenemos más que
+arrancar <code>Emacs</code> y ejecutar la orden:</p>
+
+<pre><code>M-x package-list-packages
+</code></pre>
+
+<p>donde <code>M-x</code> representa, como es bien sabido, la operación de pulsar la
+tecla <code>Alt</code> y sin soltarla pulsar entonces la tecla <code>x</code>. Los usuarios
+saben que podemos comenzar a escribir <code>pack</code> y usar la tecla de
+tabulador para completar.</p>
+
+<p>En
+<a href="http://ubuntudriver.blogspot.com.es/2015/01/instalar-tex-live-en-ubuntu-sin-usar.html">este post</a>
+se muestra un ejemplo de como instalar una extensión mediante
+<code>ELPA</code>. En el ejemplo mencionado se trata concretamente de instalar
+<code>auctex</code>. Para más detalles sobre la instalación con <code>ELPA</code> se puede
+consultar <a href="http://ergoemacs.org/emacs/emacs_package_system.html">éste otro post</a>.</p>
+
+<h3 id="para-escribir-este-post-han-sido-útiles-los-siguientes-enlaces">Para escribir este post han sido útiles los siguientes enlaces:</h3>
+
+<p><a href="http://www.emacswiki.org/emacs/ELPA">ELPA</a></p>
+
+<p><a href="http://ergoemacs.org/emacs/emacs_package_system.html">Emacs: How to Install Packages Using ELPA, MELPA</a></p>
+
+<p><a href="http://tromey.com/elpa/install.html">Install Emacs Lisp Package Archive (Emacs 21 and Emacs 22)</a></p>
+
+<p><a href="http://ubuntudriver.blogspot.com.es/2015/01/instalar-tex-live-en-ubuntu-sin-usar.html">Instalar texlive sin usar apt-get</a></p>
+
+<p><a href="http://wikemacs.org/wiki/Package.el">Package.el</a></p>
+
+<p><a href="http://batsov.com/articles/2012/02/19/package-management-in-emacs-the-good-the-bad-and-the-ugly/">(think)</a></p>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

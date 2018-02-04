@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Guía para usar Cron &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Guía para usar Cron</h1>
+        <div class="post-meta">
+            <time datetime="01 September 2016">
+                01 September 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p><code>cron</code> es una herramienta de los sistema unix para ejecutar ordenes o scripts automáticamente en una determinada hora o fecha. Un uso frecuente podría ser el envió de emails en determinados servidores con información o back-ups de datos.</p>
+
+<p>Como se marca en <a href="http://stackoverflow.com/questions/21789148/difference-between-cron-and-crontab">este enlace de stackoverflow</a> existe una diferencia de términos que algunos usuarios confunden. <code>cron</code> es el servicio que nos permite realizar las tareas periódicamente, <code>crond</code> es el <code>demonio</code> que lee los archivos de configuración, que se denominan <code>contrab</code> y que indican las acciones que se van a llevar a cabo y cuando.</p>
+
+<h2 id="ordenes-principales">Ordenes principales</h2>
+
+<p>Existen dos ordenes que nos van a servir para manejar <code>cron</code>:</p>
+
+<ul>
+<li>Para listar las tarea usaremos <code>crontab -l</code></li>
+<li>Para editar las tareas usaremos <code>crontab -e</code></li>
+</ul>
+
+<p>Es importante señalar que si lo hacemos de esta manera las ordenes se ejecutarán como si lo hiciésemos nosotros. Si queremos que se ejecuten como usuario <code>root</code> deberemos agregar <code>sudo</code> antes de la orden.</p>
+
+<p>Para incluir una tarea la agregaremos al fichero que se nos abre con la orden <code>crontab -e</code>.</p>
+
+<h2 id="formato-de-las-tareas">Formato de las tareas</h2>
+
+<p>La estructura de una tarea al cuando usamos la orden <code>crontab -e</code> es parecida a la siguiente:</p>
+
+<pre><code>* * * * * /directorio/del/script/script.sh
+</code></pre>
+
+<p>Encontramos 5 estrellas y una orden o script que ejecutar. Cada estrella representa lo siguiente:</p>
+
+<pre><code>minuto hora dia mes dia_semana
+</code></pre>
+
+<ul>
+<li>minuto: Controla en que minuto se ejecuta la orden indicada y acepta valores entre 0 y 59</li>
+<li>hora: Controla la hora en la que se ejecuta la orden indicada. Usa el formato de 24h y acepta valores entre 0 y 23 siendo 0 medianoche.</li>
+<li>dia: Es el día del mes en el que se ejecuta la orden indicada, acepta valores entre 1 y 31</li>
+<li>mes: Es el mes en el que la orden indicada se ejecuta. Acepta valores entre 1 y 12.</li>
+<li>dia_semana: El día de la semana en el que se ejecuta la orden indicada. Acepta valores de 0 a 6 siendo 0 el domingo y 6 el sábado. El 7 también es domingo.</li>
+</ul>
+
+<p>Si no desea establecer un valor para un campo simplemente escriba <code>*</code> que se interpreta como <code>cada</code>.</p>
+
+<p>Un ejemplo sería:</p>
+
+<pre><code>0 8 * * 1 echo &quot;Esta orden se ejecuta cada lunes a las 8 de la mañana&quot;
+</code></pre>
+
+<p>También podemos pasar listas usando comas como separadores. Ej:</p>
+
+<pre><code>0 8 * * 1,2,3,4,5 echo &quot;Esta orden se ejecuta de lunes a viernes&quot;
+</code></pre>
+
+<p>O como alternativa podemos escribir 1-5 con idéntico resultado.</p>
+
+<pre><code>0 8 * * 1-5 echo &quot;Esta orden se ejecuta de lunes a viernes&quot;
+</code></pre>
+
+<p>O por ejemplo si queremos que sea cada cinco minutos podemos escribir:</p>
+
+<pre><code>*/5 8 * * 1-5 echo &quot;Esta orden se ejecuta de lunes a viernes cada 5 minutos&quot;
+</code></pre>
+
+<p>Además existen palabras reservadas que simplifican expresiones como: <code>@yearly</code>, <code>@monthly</code>, <code>@weekly</code>, <code>@daily</code>, <code>@hourly</code> o <code>@reboot</code>. Esta última hace que se ejecute la orden al inicio. Un ejemplo sería:</p>
+
+<pre><code>@hourly echo &quot;Cada hora aparece este mensaje&quot;
+</code></pre>
+
+<h2 id="hace-falta-reiniciar">¿Hace falta reiniciar?</h2>
+
+<p>Esta es una pregunta que me hice la primera vez que use <code>cron</code> y como se indica <a href="http://stackoverflow.com/questions/10193788/restarting-cron-after-changing-crontab-file">en esta respuesta</a> no es necesario. No obstante podemos reiniciar el servicio ejecutando en la terminal:</p>
+
+<pre><code>sudo service cron reload
+</code></pre>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Configurar Django con Nginx, Gunicorn, virtualenv, supervisor y PostgreSQL &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Configurar Django con Nginx, Gunicorn, virtualenv, supervisor y PostgreSQL</h1>
+        <div class="post-meta">
+            <time datetime="20 July 2016">
+                20 July 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<p>Esta es una traducción del post que puede encontrar en el enlace:</p>
+
+<p><a href="http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/">http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/</a></p>
+
+<p>contando con el permiso autor para compartirlo en español.</p>
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Django es un <em>framework</em> de desarrollo web eficiente, versátil y dinámico que está en continua evolución. Cuando Django empezó a ganar popularidad la configuración que se recomendaba era con Apache y mod_wsgi. El &ldquo;arte&rdquo; de hacer funcionar a Django ha cambiado y la configuración recomendada se ha hecho más eficiente y elástica a la par que más compleja e incluye herramientas como: Nginx, Gunicorn, virtualenv, supervisord y/o PostgreSQL.</p>
+
+<p>En este post se explicará como combinar todas estas herramientas en un servidor corriendo Linux.</p>
+
+<h2 id="requisitos">Requisitos</h2>
+
+<p>Se asume que cuenta con un servidor en el que tiene privilegios de usuario. Yo (el autor original) uso un servidor corriendo Debian 7, así que todo lo aquí dicho debería funcionar en servidores con Ubuntu o otras distribuciones basadas en Debian.</p>
+
+<p>Si está usando una distribución basada en RPM (como CentOS), necesitará reemplazar las ordenes apt-get por sus equivalentes yum y si usa FreeBSD puede instalar los componentes por ports.</p>
+
+<p>Si no dispone de un servidor con el que &ldquo;jugar&rdquo;, le recomendaría un servidor VPS económico en Digital Ocean. Si se registra con <a href="https://www.digitalocean.com/?refcode=053914aba44d">este enlace</a> me ayudará a reducir mi siguiente factura :)</p>
+
+<p>También se presupone que ha configurado su DNS para que apunte a la IP del servidor. Para esta guía el dominio será <code>example.com</code></p>
+
+<h2 id="actualizar-el-sistema">Actualizar el sistema</h2>
+
+<p>Empezaremos asegurándonos que el sistema esté actualizado:</p>
+
+<pre><code>sudo apt-get update
+sudo apt-get upgrade
+</code></pre>
+
+<h2 id="postgresql">PostgreSQL</h2>
+
+<p>Para instalarlo ejecute la orden</p>
+
+<pre><code>sudo apt-get install postgresql postgresql-contrib
+</code></pre>
+
+<p>Y a continuación cree un usuario y una nueva base de datos para el proyecto.</p>
+
+<pre><code>sudo su - postgres
+postgres@django:~$ createuser --interactive -P
+Enter name of role to add: hello_django
+Enter password for new role: 
+Enter it again: 
+Shall the new role be a superuser? (y/n) n
+Shall the new role be allowed to create databases? (y/n) n
+Shall the new role be allowed to create more new roles? (y/n) n
+postgres@django:~$
+
+postgres@django:~$ createdb --owner hello_django hello
+postgres@django:~$ logout
+</code></pre>
+
+<h2 id="usuario-de-la-aplicación">Usuario de la aplicación</h2>
+
+<p>Incluso aunque Django tiene una buena lista con los <a href="http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/">problemas de seguridad</a>, las aplicaciones se pueden ver comprometidas. Si la aplicación tiene acceso limitado a los recursos de su servidor, los daños potenciales también pueden limitarse. La aplicación debería funcionar con un usuario con privilegios restringidos.</p>
+
+<p>Cree un usuario para la aplicación llamado <code>hello</code> y asignelo a un grupo llamado <code>webapps</code></p>
+
+<pre><code>$ sudo groupadd --system webapps 
+$ sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/hello_django hello
+</code></pre>
+
+<h2 id="instalar-virtualenv-y-crear-un-entorno-para-su-aplicación">Instalar virtualenv y crear un entorno para su aplicación</h2>
+
+<p><a href="http://virtualenv.org/">Virtualenv</a> es una herramienta que permite crear entornos Python separados de nuestro sistema. Esto permite trabajar con aplicaciones con distintos requisitos al mismo tiempo. Por ejemplo, una basado en Django 1.5 y otro en Django 1.6. Virtualenv es facil de instalar en Debian:</p>
+
+<pre><code>sudo apt-get install python-virtualenv
+</code></pre>
+
+<h2 id="crear-y-activar-un-entorno-para-su-aplicación">Crear y activar un entorno para su aplicación</h2>
+
+<p>Me gusta que todas mis aplicaciones estén en el directorio <code>/webapps/</code>. Si lo prefiere <code>/var/www/</code> , <code>/srv/</code> o cualquier otra ubicación de su agrado. Cree un directorio para albergar su aplicación <code>/webapps/hello_django/</code> y cambie el propietario del directorio al usuario de su aplicación,  <code>hello</code></p>
+
+<pre><code>$ sudo mkdir -p /webapps/hello_django/
+$ sudo chown hello /webapps/hello_django/
+</code></pre>
+
+<p>Ahora cree un entorno de virtualenv siendo el usuario de su aplicación en el directorio de esta:</p>
+
+<pre><code>$sudo su - hello hello@django:~$ cd /webapps/hello_django/
+hello@django:~$ virtualenv .
+
+New python executable in hello_django/bin/python Installing
+distribute..............done. Installing pip.....................done.
+
+hello@django:~$ source bin/activate (hello_django)hello@django:~$
+</code></pre>
+
+<p>Ahora el entorno está activado y se puede proceder a instalar Django en él.</p>
+
+<pre><code>(hello_django)hello@django:~$ pip install django
+
+Downloading/unpacking django
+(...)
+Installing collected packages: django
+(...)
+Successfully installed django
+Cleaning up...
+</code></pre>
+
+<p>El entorno con Django debería estar ya preparado. Ahora proceda a instalar Django:</p>
+
+<pre><code>(hello_django)hello@django:~$ django-admin.py startproject hello
+</code></pre>
+
+<p>Puede comprobar que todo funcione ejecutando el servidor de desarrollo:</p>
+
+<pre><code>(hello_django)hello@django:~$ cd hello
+(hello_django)hello@django:~$ python manage.py runserver example.com:8000
+Validating models...
+
+0 errors found
+June 09, 2013 - 06:12:00
+Django version 1.5.1, using settings 'hello.settings'
+Development server is running at http://example.com:8000/
+Quit the server with CONTROL-C.
+</code></pre>
+
+<p>Ahora debería poder acceder al servidor atraves de la url <a href="http://example.com:8000">http://example.com:8000</a></p>
+
+<p>##Dar permisos de escritura a otros usuarios en el directorio de la aplicación</p>
+
+<p>La aplicación va a funcionar como el usuario <code>hello</code>, el cual tiene permisos en todo el directorio. Si quiere que el usuario habitual pueda cambiar archivos de la apliación, puede cambiar el propietario del grupo del directorio a <code>users</code> y otorgar permisos de escritura al grupo.</p>
+
+<pre><code>$ sudo chown -R hello:users /webapps/hello_django
+$ sudo chmod -R g+w /webapps/hello_django
+</code></pre>
+
+<p>Puede comprobar los grupos de los que usted es miembro usando la orden <code>groups</code> o <code>id</code></p>
+
+<pre><code>$ id
+uid=1000(michal) gid=1000(michal) groups=1000(michal),27(sudo),100(users)
+</code></pre>
+
+<p>Si no es miembro de users, se puede agregar a usted mismo con:</p>
+
+<pre><code>$ sudo usermod -a -G users `whoami`
+</code></pre>
+
+<h2 id="configurar-postgresql-para-trabajar-con-django">Configurar PostgreSQL para trabajar con Django</h2>
+
+<p>Para poder usar PostgreSQL con Django será necesarios instalar <code>psycopg2</code>  en su entorno virtual. Este paso requiere la compilación de una extensión nativa escrita en C. La compilación fallará si no puede encontrar los archivos <code>header</code> y las librerías requeridas para el enlazar los programas de C con <code>libpq</code> (librería de comunicación con Postgres) y construir los modulos de Pyton (<code>python-dev</code> package). Tenemos que instalar estos dos paquetes primero y entonces podremos instalar <code>psycopg2</code> usando <code>pip</code>:</p>
+
+<pre><code>$ sudo aptitude install libpq-dev python-dev
+(hello_django)hello@django:~$ pip install psycopg2
+</code></pre>
+
+<p>Y ahora podremos configurar nuestra base de datos en el archivo <code>settings.py</code> de Django:</p>
+
+<pre><code>DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hello',
+        'USER': 'hello_django',
+        'PASSWORD': '1Ak5RTQt7mtw0OREsfPhJYzXIak41gnrm5NWYEosCeIduJck10awIzoys1wvbL8',
+        'HOST': 'localhost',
+        'PORT': '',                      # Set to empty string for default.
+    }
+}
+</code></pre>
+
+<p>Y por último podremos construir la base de datos desde Django:</p>
+
+<pre><code>(hello_django)hello@django:~$ python manage.py syncdb
+</code></pre>
+
+<h2 id="gunicorn">Gunicorn</h2>
+
+<p>En producción no usaremos el servidor de desarrollo de Django sino una aplicación dedicada a servir nuestro contenido, <a href="http://gunicorn.org/">gunicorn</a>.</p>
+
+<p>Lo primero será instalar <code>gunicorn</code> en el entorno virtual de nuestra aplicación:</p>
+
+<pre><code>(hello_django)hello@django:~$ pip install gunicorn
+Downloading/unpacking gunicorn
+  Downloading gunicorn-0.17.4.tar.gz (372Kb): 372Kb downloaded
+  Running setup.py egg_info for package gunicorn
+
+Installing collected packages: gunicorn
+  Running setup.py install for gunicorn
+
+    Installing gunicorn_paster script to /webapps/hello_django/bin
+    Installing gunicorn script to /webapps/hello_django/bin
+    Installing gunicorn_django script to /webapps/hello_django/bin
+Successfully installed gunicorn
+Cleaning up...
+</code></pre>
+
+<p>Puede comprobar que <code>gunicorn</code> funciona correctamente con la orden:</p>
+
+<pre><code>(hello_django)hello@django:~$ gunicorn hello.wsgi:application --bind example.com:8001
+</code></pre>
+
+<p>Ahora debería poder acceder al servidor a través de la url <a href="http://example.com:8001/">http://example.com:8001/</a> . Se ha cambiado intencionadamente 8000 por 8001 para forzar al navegador a establecer una nueva conexión.</p>
+
+<p>Gunicorn está ahora instalado y listo para servir su aplicación. Procedamos a establecer una configuración básica para hacerlo más útil. Estableceremos una serie de parámetros en un archivo <code>bash</code> que gurdaremos en <code>bin/gunicorn_start</code>.</p>
+
+<pre><code>#!/bin/bash
+
+NAME=&quot;hello_app&quot;                                  # Name of the application
+DJANGODIR=/webapps/hello_django/hello             # Django project directory
+SOCKFILE=/webapps/hello_django/run/gunicorn.sock  # we will communicte using this unix socket
+USER=hello                                        # the user to run as
+GROUP=webapps                                     # the group to run as
+NUM_WORKERS=3                                     # how many worker processes should Gunicorn spawn
+DJANGO_SETTINGS_MODULE=hello.settings             # which settings file should Django use
+DJANGO_WSGI_MODULE=hello.wsgi                     # WSGI module name
+
+echo &quot;Starting $NAME as `whoami`&quot;
+
+# Activate the virtual environment
+cd $DJANGODIR
+source ../bin/activate
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+# Create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Start your Django Unicorn
+# Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
+exec ../bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user=$USER --group=$GROUP \
+--bind=unix:$SOCKFILE \
+--log-level=debug \
+--log-file=-
+</code></pre>
+
+<p>Y una vez guardado deberá darle permisos de ejecución:</p>
+
+<pre><code>    $ sudo chmod u+x bin/gunicorn_start
+</code></pre>
+
+<p>Puede comprobar que todo funciona ejecutando el script como <code>hello</code>:</p>
+
+<pre><code>$ sudo su - hello
+hello@django:~$ bin/gunicorn_start
+Starting hello_app as hello
+2013-06-09 14:21:45 [10724] [INFO] Starting gunicorn 18.0
+2013-06-09 14:21:45 [10724] [DEBUG] Arbiter booted
+2013-06-09 14:21:45 [10724] [INFO] Listening at: unix:/webapps/hello_django/run/gunicorn.sock (10724)
+2013-06-09 14:21:45 [10724] [INFO] Using worker: sync
+2013-06-09 14:21:45 [10735] [INFO] Booting worker with pid: 10735
+2013-06-09 14:21:45 [10736] [INFO] Booting worker with pid: 10736
+2013-06-09 14:21:45 [10737] [INFO] Booting worker with pid: 10737
+
+^C (CONTROL-C to kill Gunicorn)
+
+2013-06-09 14:21:48 [10736] [INFO] Worker exiting (pid: 10736)
+2013-06-09 14:21:48 [10735] [INFO] Worker exiting (pid: 10735)
+2013-06-09 14:21:48 [10724] [INFO] Handling signal: int
+2013-06-09 14:21:48 [10737] [INFO] Worker exiting (pid: 10737)
+2013-06-09 14:21:48 [10724] [INFO] Shutting down: Master
+$ exit
+</code></pre>
+
+<p>Necesitará modificar los parámetros y caminos en el archivo <code>gunicorn_start</code> para que coincidan con los de su aplicación.</p>
+
+<p>Como regla establezca <code>--workers</code>  (<code>NUM_WORKERS</code>) de acuerdo con la fórmula siguiente: <code>2 * CPUs + 1</code>. La idea es que en algún momento la mitad de sus trabajadores estará haciendo tareas de I/O. Para una máquina de un núcleo establezca, de acuerdo con la regla, 3 trabajadores.</p>
+
+<p>El argumento <code>--name</code> (<code>NAME</code>) será con el que se identifique al proceso en ordenes como <code>ps</code> ó <code>top</code>. Por defecto es <code>gunicorn</code>, lo cual puede provocar que sea difícil de identificar si hay varias aplicaciones funcionando.</p>
+
+<p>Para que <code>--name</code> funcione será necesario que instale un módulo de Python llamado <code>setproctitle</code>. Para construir esta extensión nativa <code>pip</code> necesita tener acceso a los archivos <code>header</code> en C para Python. Puede añadirlos con el paquete <code>python-dev</code> y entonces instalar <code>setproctitle</code>.</p>
+
+<pre><code>$ sudo aptitude install python-dev
+(hello_django)hello@django:~$ pip install setproctitle
+</code></pre>
+
+<p>Ahora cuando liste sus procesos, podrá ver que proceso de gunicorn corresponde a cada aplicación:</p>
+
+<pre><code>$ ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+(...)
+hello    11588  0.7  0.2  58400 11568 ?        S    14:52   0:00 gunicorn: master [hello_app]
+hello    11602  0.5  0.3  66584 16040 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+hello    11603  0.5  0.3  66592 16044 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+hello    11604  0.5  0.3  66604 16052 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+</code></pre>
+
+<h2 id="iniciar-y-controlar-gunicorn-con-supervisor">Iniciar y controlar Gunicorn con Supervisor</h2>
+
+<p>Su script <code>gunicorn_start</code> debería estar ahora listo y funcionando. Necesitamos estar seguros de que puede iniciarse automáticamente con el sistema y que puede reiniciarse si por alguna razón se apaga inesperadamente. Estas tareas pueden ser fácilmente administradas por un servicio llamado <code>supervisord</code>. Su instalación es muy sencilla:</p>
+
+<pre><code>$ sudo aptitude install supervisor
+</code></pre>
+
+<p>Cuando <code>Supervisor</code> este instalado, usted puede asignarle programas que iniciar y vigilar creando archivos en la carpeta <code>/etc/supervisor/conf.d</code>. Para nuestra aplicación <code>hello</code> crearemos un archivo llamado  <code>/etc/supervisor/conf.d/hello.conf</code> con el siguiente contenido:</p>
+
+<script src="//gist.github.com/postrational/5747293.js?file=hello.conf"></script>
+
+<p>Puede asignarle muchas <a href="http://supervisord.org/configuration.html#program-x-section-settings">más opciones</a>, pero esta configuración básica debería ser suficiente.</p>
+
+<p>Ahora cree un archivo para almacenar los &ldquo;logs&rdquo; de la aplicación:</p>
+
+<pre><code>hello@django:~$ mkdir -p /webapps/hello_django/logs/
+hello@django:~$ touch /webapps/hello_django/logs/gunicorn_supervisor.log 
+</code></pre>
+
+<p>Después de guardar el archivo de configuración para su programa puede pedirle a <code>supervisor</code> que vuelva a leer los archivos de configuración y que actualize (lo cual hará que se inicie la nueva aplicación).</p>
+
+<pre><code>$ sudo supervisorctl reread
+hello: available
+$ sudo supervisorctl update
+hello: added process group
+</code></pre>
+
+<p>También puede comprobar el estado de su aplicación, iniciarla, detenerla o reiniciarla usando supervisor.</p>
+
+<pre><code>$ sudo supervisorctl status hello                       
+hello                            RUNNING    pid 18020, uptime 0:00:50
+$ sudo supervisorctl stop hello  
+hello: stopped
+$ sudo supervisorctl start hello                        
+hello: started
+$ sudo supervisorctl restart hello 
+hello: stopped
+hello: started
+</code></pre>
+
+<p>Su aplicación debería ahora iniciarse automáticamente después de un reinicio del sistema o reiniciarse tras un error inesperado.</p>
+
+<h2 id="nginx">Nginx</h2>
+
+<p>Ahora es momento de configurar Nginx como servidor para nuestra aplicación y los archivos estáticos (<code>static files</code>) .</p>
+
+<pre><code>$ sudo apt-get install nginx
+$ sudo service nginx start
+</code></pre>
+
+<p>Puede navegar a la url de su servidor (<a href="http://example.com">http://example.com</a>) con su navegador y Nginx debería saludarle con las palabras <code>“Welcome to nginx!”</code></p>
+
+<h3 id="crear-una-configuración-para-django-en-el-servidor-virtual-de-nginx">Crear una configuración para django en el servidor virtual de Nginx.</h3>
+
+<p>Cada servidor virtual de Nginx podría describirse como un archivo en
+el directorio <code>/etc/nginx/sites-available</code>. Pude seleccionar qué sitios quiere hacer disponibles creando enlaces simbólicos a éstos en la carpeta <code>/etc/nginx/sites-enabled</code></p>
+
+<p>Cree un nuevo archivo de configuración de Nginx para su aplicación de Django funcionando en <code>example.com</code> en <code>/etc/nginx/sites-available/hello</code>. El archivo debería contener algo parecido a las siguientes líneas. Una explicación más detallada está disponible de parte de <a href="https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf">los desarrolladores de Gunicorn.</a></p>
+
+<script src="//gist.github.com/postrational/5747293.js"></script>
+
+<p>Cree un enlace simbólico en la carpeta <code>sites-enabled</code>:</p>
+
+<pre><code>$ sudo ln -s /etc/nginx/sites-available/hello /etc/nginx/sites-enabled/hello
+</code></pre>
+
+<p>Reinicie Nginx:</p>
+
+<pre><code>$ sudo service nginx restart 
+</code></pre>
+
+<p>Si navega a su sitio web, debería poder observar su página de bienvenida de Django servida por <code>Nginx</code> y <code>Gunicorn</code>.</p>
+
+<p>En este momento podría ocurrir que observase la página por defecto de <code>“Welcome to nginx!”</code> en lugar de la de bienvenida de Django. Esto podría deberse al archivo de configuración por defecto de Nginx. Si no planea usarlo, elimine el enlace simbólico a este archivo del directorio <code>/etc/nginx/sites-enabled</code>.</p>
+
+<p>Si encuentra algún problema con la configuración no dude en escribirme (tanto al autor original como a mí).</p>
+
+<h2 id="estructura-final-del-directorio">Estructura final del directorio</h2>
+
+<pre><code>/webapps/hello_django/
+├── bin                          &lt;= Directory created by virtualenv
+│   ├── activate                 &lt;= Environment activation script
+│   ├── django-admin.py
+│   ├── gunicorn
+│   ├── gunicorn_django
+│   ├── gunicorn_start           &lt;= Script to start application with Gunicorn
+│   └── python
+├── hello                        &lt;= Django project directory, add this to PYTHONPATH
+│   ├── manage.py
+│   ├── project_application_1
+│   ├── project_application_2
+│   └── hello                    &lt;= Project settings directory
+│       ├── __init__.py
+│       ├── settings.py          &lt;= hello.settings - settings module Gunicorn will use
+│       ├── urls.py
+│       └── wsgi.py              &lt;= hello.wsgi - WSGI module Gunicorn will use
+├── include
+│   └── python2.7 -&gt; /usr/include/python2.7
+├── lib
+│   └── python2.7
+├── lib64 -&gt; /webapps/hello_django/lib
+├── logs                         &lt;= Application logs directory
+│   ├── gunicorn_supervisor.log
+│   ├── nginx-access.log
+│   └── nginx-error.log
+├── media                        &lt;= User uploaded files folder
+├── run
+│   └── gunicorn.sock 
+└── static                       &lt;= Collect and serve static files from here
+</code></pre>
+
+<h2 id="desinstalar-la-aplicación-de-django">Desinstalar la aplicación de Django</h2>
+
+<p>Si en algún momento quiere desinstalar la aplicación siga los siguientes pasos.</p>
+
+<p>Eliminar los servidores virtuales de la carpeta <code>sites-enabled</code>:</p>
+
+<pre><code>$ sudo rm /etc/nginx/sites-enabled/hello_django
+</code></pre>
+
+<p>Reiniciar Nginx:</p>
+
+<pre><code>$ sudo service nginx restart 
+</code></pre>
+
+<p>Si no piensa volver a usar esta aplicación la puede eliminar de la carpeta <code>sites-available</code>:</p>
+
+<pre><code>$ sudo rm /etc/nginx/sites-available/hello_django
+</code></pre>
+
+<p>Detener la aplicación con Supervisor:</p>
+
+<pre><code>$ sudo supervisorctl stop hello
+</code></pre>
+
+<p>Eliminar la aplicación del script de configuración de supervisor:</p>
+
+<pre><code>$ sudo rm /etc/supervisor/conf.d/hello.conf
+</code></pre>
+
+<p>Si no va a volver a usar la aplicación puede eliminarla de <code>/webapps</code></p>
+
+<pre><code>$ sudo rm -r /webapps/hello_django
+</code></pre>
+
+<h2 id="servir-varias-aplicaciones">Servir varias aplicaciones</h2>
+
+<p>Si precisase alguna ayuda configurando el servidor Nginx para mantener varias aplicaciones de Django, no dude en visitar el <a href="http://michal.karzynski.pl/blog/2013/10/29/serving-multiple-django-applications-with-nginx-gunicorn-supervisor/">siguiente post del autor</a>.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>El patron (n&#43;k) en Haskell a partir de la versión 7.0.3 &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">El patron (n&#43;k) en Haskell a partir de la versión 7.0.3</h1>
+        <div class="post-meta">
+            <time datetime="27 November 2016">
+                27 November 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Con las versiones de Haskell provistas en los Ubuntu anteriores a Ubuntu 11.10, los programadores de Haskell han venido usando un truco permitido, aunque no muy ortodoxo, que era incluir el patrón (n+k) en las definiciones de funciones, a la izquierda del igual definitorio. Por ejemplo, la implementación del factorial era entendida por muchos así:</p>
+
+<pre><code>factorial :: Integer -&gt; Integer
+factorial 0 = 1
+factorial (n+1)  =  (n+1) * factorial n
+</code></pre>
+
+<p>en lugar de:</p>
+
+<pre><code>fact :: Integer -&gt; Integer
+fact 0 = 1
+fact n  =  n * fact (n-1)
+</code></pre>
+
+<p>El lector se preguntará intrigado por la diferencia entre <code>factorial</code> y <code>fact</code>. Es muy sutil, tanto que ni algunos desarrolladores la captan &hellip; y todo se debe a un comportamiento <em>sui géneris</em> del intérprete/compilador. Resulta que al intentar calcular <code>factorial (-1)</code> el diálogo que se producía antes, por ejemplo bajo GHCi version 6.10.4, era:</p>
+
+<pre><code>*Main&gt; factorial (-1)
+*** Exception: factorial.hs:(2,0)-(3,36): Non-exhaustive patterns in function factorial
+
+
+*Main&gt; fact (-1)
+*** Exception: stack overflow
+</code></pre>
+
+<p>##Explicación</p>
+
+<p>Con <code>fact</code> ocurre lo siguiente:</p>
+
+<pre><code>fact (-1)  = (-1) * fact (-2)
+           = (-1) * (-2) * fact (-3)
+           = etc ... por siempre
+</code></pre>
+
+<p>Con <code>factorial</code> ocurría algo distinto. Al intentar calcular <code>factorial (-1)</code> el intérprete busca si <code>(-1)</code> unifica con el argumento de la primera línea, y esto no ocurre porque <code>-1</code> es distinto de <code>0</code>; así pués intenta ver si <code>(-1)</code> unifica con <code>(n+1)</code> para algún valor de <code>n</code>, pero en las antiguas versiones <code>(n+k)</code>, con <code>k</code> natural fijo pero arbitrario, únicamente unificaba con valores enteros superiores o iguales a <code>k</code>. Por tanto, <code>(-1)</code> no unificaba con el patrón de ninguna de las líneas definitorias de <code>factorial</code> y, siendo <code>-1</code> una instancia del tipo <code>Integer</code>, la definición de factorial debería estar incompleta, de ahí el mensaje &ldquo;Non-exhaustive patterns in function factorial&rdquo;.</p>
+
+<p>Total, lo que hacía el programador era optimizar el esfuerzo al escribir código y conjurar el peligro de caer en un bucle infinito, promoviendo una definición incompleta cuya excepción siempre se podría capturar.</p>
+
+<p>Los desarrolladores, creemos que con buen criterio, han impedido estas estratégias y han impedido definiciones como la de factorial en beneficio de definiciones como las de <code>fact</code>. De hecho, si con GHCi, version 7.0.3 intentamos interpretar un fichero que contuviera a <code>factorial</code>, se produciría un error como el siguiente:</p>
+
+<pre><code>$ ghci factorial.hs
+GHCi, version 7.0.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+[1 of 1] Compiling Main             ( factorial.hs, interpreted )
+
+factorial.hs:3:12: Parse error in pattern: n + 1
+Failed, modules loaded: none.
+Prelude&gt; 
+</code></pre>
+
+<p>donde se dice explícitamente que no admite el patrón <code>(n+1)</code>.</p>
+
+<h2 id="problema">Problema</h2>
+
+<p>Creemos que lo adecuado y aconsejable es programar sin el patrón <code>(n+k)</code> dando definiciones exhaustiva, con mensajes de error cuando sea conveniente; pero &hellip; ¿qué hacemos con lo ya programado?</p>
+
+<p>Para programas antiguos concebidos con esas estratégias, programas que no estamos dispuestos a modificar pues podría suponer un gran esfuerzo: ¿qué solución hay, si la hay?</p>
+
+<h2 id="solución">Solución</h2>
+
+<p>Pues sí la hay y la hemos encontrado. Mejor dicho, conocemos dos soluciones:</p>
+
+<p>1 La primera sería incluir en la cabecera del fichero el siguiente texto:</p>
+
+<pre><code>-- posible comentario
+{-# LANGUAGE NPlusKPatterns #-}
+module Main where
+</code></pre>
+
+<p>con lo que quedaría</p>
+
+<pre><code>-- posible comentario
+{-# LANGUAGE NPlusKPatterns #-}
+module Main where
+
+
+factorial :: Integer -&gt; Integer
+factorial 0 = 1
+factorial (n+1)  =  (n+1) * factorial n
+</code></pre>
+
+<p>que sería admitido por el nuevo ghci sin error. No es necesario poner aquí <code>Main</code> en <code>module Main where</code>, podríamos haber puesto otro nombre, pero dejo este para sugerir que podríamos estar ante el módulo <code>main</code> de un proyecto, que podría ser compilado también con <code>ghc</code>.</p>
+
+<p>2 Al compilar el fichero <code>factorial.hs</code> que contiene, o llama, a la función factorial, haríamos lo siguiente:</p>
+
+<pre><code>ghci -XNPlusKPatterns factorial.hs
+</code></pre>
+
+<p>Creemos que también funciona</p>
+
+<pre><code>ghc  -XNPlusKPatterns .... factorial.hs
+</code></pre>
+
+<p>En realidad, cualquiera de las dos soluciones lo que hace es forzar al intérprete/compilador de Haskell a volver al pasado, volver a los esquemas que sí admitían el patrón definitorio <code>(n+k)</code>.</p>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
