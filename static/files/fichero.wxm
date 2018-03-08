@@ -1,0 +1,13 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 0.8.6 ] */
+
+/* [wxMaxima: comment start ]
+El término general de la sucesión {1+2+...+n}_{n} lo calculamos con
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+sum(i,i,1,n), simpsum;
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

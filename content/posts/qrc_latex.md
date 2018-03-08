@@ -2,7 +2,7 @@
 title = "Crear un QRC con LaTeX e incluirlo en un fichero LaTeX"
 date =  "2018-03-08"
 author =  "M García"
-description = "Los usuarios de LaTeX se muestran reacios a usar otras herramientas sipueden servirse de su preciado compilador para editar y que secomporta como una verdadera imprenta. En este post venimos a ayudarlosy a darles una razón más para seguir con 'LaTeX para todo'."
+description = "Los usuarios de LaTeX se muestran reacios a usar otras herramientas sipueden servirse de su preciado compilador para editar y que secomporta como una verdadera imprenta."
 tags = ["latex", "qr"]
 +++
 

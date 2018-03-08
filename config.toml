@@ -4,6 +4,7 @@ canonifyURLs = true
 lang = "es"
 theme = "steam"	
 buildDrafts = false
+staticDir = ["static", "themes/steam/static"]
 
 [params]
 	title = "WildUnix"
