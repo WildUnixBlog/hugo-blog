@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on </title>
+    <link>https://wildunix.es/tags/linux/</link>
+    <description>Recent content in Linux on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Instalar SageMath en Mac OS , Windows, Ubuntu y otros Linux</title>
+      <link>https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/</link>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/</guid>
+      <description>Introducción Últimamente está siendo muy utilizado el sistema algebraico computacional que conocemos con el nombre de Sage. El nombre Sage, como ocurre en tantas ocasiones, es un acrónimo, esta vez de &amp;ldquo;System for Algebra and Geometry Experimentation&amp;rdquo;. En Inglés se usa frecuentemente &amp;ldquo;sagemath&amp;rdquo; en lugar de &amp;ldquo;Sage&amp;rdquo; para distiguir de otros usos de la palabra en dicha lengua.
+Si quisiera trabajar con Sage en la nube sin tenerlo instalado en su máquina, es posible hacerlo.</description>
+    </item>
+    
+    <item>
+      <title>Guía para usar Cron</title>
+      <link>https://wildunix.es/posts/guia-para-usar-cron/</link>
+      <pubDate>Thu, 01 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/guia-para-usar-cron/</guid>
+      <description>Introducción cron es una herramienta de los sistema unix para ejecutar ordenes o scripts automáticamente en una determinada hora o fecha. Un uso frecuente podría ser el envió de emails en determinados servidores con información o back-ups de datos.
+Como se marca en este enlace de stackoverflow existe una diferencia de términos que algunos usuarios confunden. cron es el servicio que nos permite realizar las tareas periódicamente, crond es el demonio que lee los archivos de configuración, que se denominan contrab y que indican las acciones que se van a llevar a cabo y cuando.</description>
+    </item>
+    
+  </channel>
+</rss>

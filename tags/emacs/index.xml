@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Emacs on </title>
+    <link>https://wildunix.es/tags/emacs/</link>
+    <description>Recent content in Emacs on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sat, 19 Mar 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Instalar ELPA para Emacs 23</title>
+      <link>https://wildunix.es/posts/instalar-elpa-para-emacs-23/</link>
+      <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-elpa-para-emacs-23/</guid>
+      <description>Introducción Los usuarios de Emacs saben de su editor preferido varias cosas: la independencia que les ha proporcionado del ratón por vernir de un tiempo en el que se vivía sin ratón, la sensación de control pleno que les confiere, la potencia del mismo y también la dificultad de su configuración al ir un poquitín más allá de lo elemental.
+En particular es complicada la gestión de instalar complementos para Emacs.</description>
+    </item>
+    
+  </channel>
+</rss>

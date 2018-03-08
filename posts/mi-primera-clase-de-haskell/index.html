@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Mi Primera Clase de Haskell &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Mi Primera Clase de Haskell</h1>
+        <div class="post-meta">
+            <time datetime="24 September 2016">
+                24 September 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Hay un paradigma de programación que se denomina &ldquo;programación
+declarativa&rdquo;.  Surge en contraposición a la &ldquo;programación imperativa&rdquo;,
+que en sus comienzos estaba representada por lenguajes muy próximos a
+las peculiaridades de la propia máquina: operaciones artiméticas
+simples, instrucciones de acceso a la memoria, etc. Ese tipo de
+programas resultan a menudo crípticos, llegando a impedir su
+comprensión incluso a programadores entrenados, aunque en la
+actualidad los lenguajes imperativos han atenuado mucho este efecto.</p>
+
+<p>La idea de la programación declarativa es escribir programas
+especificando o &ldquo;declarando&rdquo; un conjunto de condiciones,
+proposiciones, afirmaciones, restricciones, ecuaciones o
+transformaciones que describen sin ambigüedad el problema y contienen
+su solución. Dicha solución es obtenida mediante mecanismos internos
+de control para la inferencia de información, sin que el programador
+haya especificado exactamente cómo encontrarla. A la computadora se le
+indica qué es lo que se desea obtener, no cómo hacerlo. No existen
+asignaciones destructivas y las variables son utilizadas con
+&ldquo;transparencia referencial&rdquo;.  En otras palabras, el resultado de
+evaluar una expresión compuesta depende únicamente del resultado de
+evaluar las subexpresiones que la componen y de nada más; no depende
+de la historia del programa en ejecución ni del orden de evaluación de
+las subexpresiones que la componen. Esta propiedad no se da en
+lenguajes imperativos, donde abundan los efectos cmolaterales por
+asignaciones destructivas. Veamos a Python, que no tiene la
+transparencia referencial, en un ejercicio de violación de la
+misma. Para ello consideremos el retazo de código siguiente que
+podríamos dar como contenido al fichero <code>transparencia.py</code>:</p>
+
+<pre><code>counter = 0
+
+def incremental(n):
+    global counter
+    i = 0
+    while i &lt;= n:
+        counter += 1
+        i += 1
+print counter
+
+incremental(5)
+incremental(5)
+</code></pre>
+
+<p>para entender el efecto, podemos interpretarlo y ver que ofrece el siguiente diálogo:</p>
+
+<pre><code>iMac-de-miUsuario:~ my_login$ python transparencia.py
+6
+12
+iMac-de-miUsuario:~ my_login$
+</code></pre>
+
+<p>Es decir, dos invocaciones consecutivas de la misma función &mdash;pero en
+ambientes diferentes&mdash; han dado respuestas diferentes. Y es que las
+funciones en los lenguajes no funcionales, como es el caso de Python,
+no tienen por qué comportarse como funciones en el sentido matemático;
+son más bien algo así como &ldquo;subrutinas&rdquo;.  Lo que un lenguaje funcional
+reclama, y consigue por serlo, es la recuperación de concepto
+&ldquo;función&rdquo; con el sentido dado por la matemática &hellip; y la computación.</p>
+
+<p>En estas páginas hemos hablado ya de un subparadigma del paradigma de
+programación declarativa cuando presentamos el post de
+<a href="https://wildunix.es/posts/mi-primera-clase-de-prolog/">Prolog</a>:
+la
+<a href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_l%C3%B3gica">programación lógica</a>. Tal
+paradigma está fundamentado por la
+<a href="http://es.wikipedia.org/wiki/L%C3%B3gica_de_primer_orden">Lógica de Primer Orden</a>.</p>
+
+<p>Sin embargo, los comienzos del siglo XX vieron como era alumbrada otra
+lógica, la llamada
+<a href="http://es.wikipedia.org/wiki/L%C3%B3gica_combinatoria">Lógica Combinatoria</a>. Basándose
+en ella, o en una explicación suya denominada
+<a href="https://es.wikipedia.org/wiki/C%C3%A1lculo_lambda">Lambda Calculus</a>
+(desarrollado en la década de los 30 del siglo XX para investigar la
+noción de función, la aplicación de funciones y la recursión), surgió
+el segundo gran subparadigma de la programación declarativa: la
+<a href="http://es.wikipedia.org/wiki/Programaci%C3%B3n_funcional">programación funcional</a>. Un
+lenguaje funcional es, a la postre, el resultado de una reelaboración
+del lambda calculus puro.</p>
+
+<p>La programación funcional se basa en la utilización de funciones
+aritméticas que no manejan datos mutables o de estado. Hace uso de la
+aplicación de funciones en contraposición con el el paradigma de
+programación imperativa, que hace énfasis en los cambios de estado.
+La diferencia entre una función matemática y la noción de función
+utilizada en la programación imperativa es que las funciones
+imperativas pueden tener efectos secundarios, al cambiar el valor de
+cálculos realizados previamente, carecen de transparencia referencial:
+la misma expresión sintáctica puede resultar en valores diferentes en
+diferentes momentos dependiendo del estado del programa en
+ejecución. Con código funcional, en contraste, el valor generado por
+una función depende exclusivamente de los argumentos alimentados a la
+función. Al eliminar los efectos secundarios se pude entender y
+predecir el comportamiento de un programa mucho más fácilmente, y esta
+es una de las principales motivaciones para utilizar la programación
+funcional.</p>
+
+<p>El tercer gran subparadigma de la programación declarativa es la
+programación algebraica, representada por lenguajes como <code>Maude</code> y
+<code>SQL</code>.</p>
+
+<p>En la actualidad, el lenguaje que encarna por antonomasia los cánones
+de la programación funcional es
+<a href="http://es.wikipedia.org/wiki/Haskell">Haskell</a>, un lenguaje de
+programación: estandarizado, multipropósito, puramente funcional,
+perezoso, con semánticas no estrictas y con fuerte tipificación
+estática. Su nombre se debe al lógico estadounidense Haskell B. Curry
+por la utilidad que tuvieron al respecto sus observaciones y las de su
+escuela.</p>
+
+<p>Haskell nació cuando en 1980 se constituyó un comité cuyo objetivo era
+crear un lenguaje funcional que reuniese las características de los
+múltiples lenguajes funcionales de la época, el más notable de los
+cuales era Miranda, y resolviera la confusión creada por la
+proliferación de los mismos.</p>
+
+<p>Las características más interesantes de
+<a href="https://wiki.haskell.org/Haskell">Haskell</a> incluyen el soporte para
+tipos de datos y funciones recursivas, listas, tuplas, guardas y calce
+de patrones. La combinación de las mismas puede llevar en el caso de
+algunas funciones a una implementación casi trivial, y sin embargo ser
+su correspondiente versión en lenguajes imperativos extremadamente
+tediosas de programar.</p>
+
+<p>##Instalación</p>
+
+<p>Al instalar Haskell en nuestro ordenador, conviene instalar la
+plataforma completa. En Ubuntu, cuando ésta está disponible, la
+instalación es trivial:</p>
+
+<pre><code>sudo apt-get install haskell-platform
+</code></pre>
+
+<p>y si somos felices usuarios de Mac OS X con
+<a href="https://www.macports.org/install.php">macport</a> instalado (depende de
+<a href="https://itunes.apple.com/es/app/xcode/id497799835?mt=12">Xcode</a> y
+posterior instalación de <code>Command Line Tools</code>), la instalación de la
+plataforma Haskell la efectuaremos con la orden de consola:</p>
+
+<pre><code>sudo port install haskell-platform
+</code></pre>
+
+<p>Al instalar la plataforma tendremos instalado <code>Cabal</code>. <code>Cabal</code> es el
+sistema de paquetes estándar para el software de Haskell. Ayuda a
+configurar, compilar e instalar el software de Haskell y distribuirlo
+fácilmente a otros usuarios y desarrolladores. Ayuda con la
+instalación de paquetes existentes y también ayuda a los
+desarrolladores con sus propios paquetes. Se puede utilizar para
+trabajar con paquetes locales o para instalar paquetes desde archivos
+de paquetes en línea, incluyendo las dependencias que instala de forma
+automática. Por defecto está configurado para utilizar Hackage que es
+archivo del paquete central de Haskell y que contiene miles de
+bibliotecas y aplicaciones en el formato de paquete de Cabal.</p>
+
+<p>Un ejemplo de utilización de Cabal para instalar paquetes de un
+archivo remoto de paquetes contenido en Hackage y que se llama xmonad
+sería utilizando la orden en línea llamada cabal:</p>
+
+<pre><code>cabal install xmonad
+</code></pre>
+
+<p>lo cual instalará el paquete <code>xmonad</code> además de todas sus dependencias.</p>
+
+<h2 id="en-cuanto-al-editor">En cuanto al editor</h2>
+
+<p>Siempre decimos que nuestros lectores pueden usar su editor preferido,
+sin embargo en este caso hay algunas restricciones. Nunca nunca
+usaremos editores que al tabular introduzcan caracteres no
+imprimibles. La razón es que Haskell es un lenguaje que ha suprimido
+los terminadores de línea, lo que ha conducido a usar indentación en
+el código. Pues bien, la indentación no es real si el editor incluye
+caracteres no imprimibles. Hemos visto a compañeros y profesores
+volverse locos tratando de entender por qué no funciona un código que
+a todas luces era perfecto; y no funcionaba porque la indentación
+estaba rota por culpa de &ldquo;fantasmas no visibles&rdquo; en el
+renglón. Recomendación: Sublime Text o Emacs &hellip; o en el otro orden
+mejor.</p>
+
+<p>###Haskell y Emacs</p>
+
+<p>Los archivos de los proyectos de Haskell son ficheros .hs. Para que
+Emacs pueda manejar fácilmente dichos ficheros, instalaremos en
+nuestro Ubuntu el paquete haskell-mode</p>
+
+<pre><code>sudo apt-get install haskell-mode
+</code></pre>
+
+<p>###Haskell y Sublime Text</p>
+
+<p>Instalaremos Sublime Text mediante:</p>
+
+<pre><code>sudo add-apt-repository ppa:webupd8team/sublime-text-3 
+sudo apt-get update 
+sudo apt-get install sublime-text-installer
+</code></pre>
+
+<p>Sublime Text está totalmente preparado para usar Haskell, salvo por un
+detalle: los caracteres no imprimibles introducidos por el
+tabulador. Para poder usar dicha tecla con toda comodidad y que no se
+incluyan estos indeseables caracteres debemos ir a</p>
+
+<pre><code>Preferences &gt; Settings - User 
+</code></pre>
+
+<p>y agregar dentro de las llaves</p>
+
+<pre><code>&quot;translate_tabs_to_spaces&quot;: true, 
+</code></pre>
+
+<p>##El &ldquo;hola mundo&rdquo;</p>
+
+<p>Haskell tiene un intérprete y un compilador. Saludemos al mundo
+primero desde el intérprete. Para ello invocaremos al intérprete desde
+la línea de comandos con la orden:</p>
+
+<pre><code>ghci
+</code></pre>
+
+<p>y el resultado será un diálogo del tipo:</p>
+
+<pre><code>Last login: Sat Sep 27 17:59:09 on console
+iMac-de-miUsuario:~ my_login$ ghci
+GHCi, version 7.6.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Prelude&gt;  
+</code></pre>
+
+<p>Hay que saber que <code>Prelude</code> es el ambiente general mínimo de librerías
+y funciones cargadas al abrir el intérprete, ambiente que se puede
+completar a deseo del usuario.  Ahora escribiremos:</p>
+
+<pre><code>Prelude&gt; putStrLn &quot;Hola ... mundo!&quot;
+</code></pre>
+
+<p>y al pulsar intro obtenemos el diálogo</p>
+
+<pre><code>Hola ... mundo!
+
+Prelude&gt;
+</code></pre>
+
+<p>Para salir del intérprete escribiremos</p>
+
+<pre><code>Prelude&gt; :q
+</code></pre>
+
+<p>y pulsando intro saldremos a la línea de órdenes de la consola.</p>
+
+<p>Si lo que queremos hacer es un ejecutable que nos permita difundir el
+saludo al mundo entre nuestros amigos, que puede que no tengan Haskell
+instalado, utilizaremos el compilador. Para ello usaremos nuestro
+editor preferido y con él abriremos un fichero que llamaremos hola.hs,
+por ejemplo. El contenido del fichero será exclusivamente la línea:</p>
+
+<pre><code>main = putStrLn &quot;Hola ... mundo!&quot;
+</code></pre>
+
+<p>Cerramos el fichero y desde la línea de órdenes de la consola
+ejecutamos la orden:</p>
+
+<pre><code>ghc -o hola hola.hs
+</code></pre>
+
+<p>por supuesto que hola es el nombre que le deseamos dar al ejecutable;
+además del mismo, se han creado otros dos: el <code>hola.hi</code> y el
+<code>hola.o</code>. Estos dos ficheros son
+<a href="http://www.haskell.org/ghc/docs/2.10/users_guide/user_174.html">auxiliares y necesarios</a>
+para la compilación. Para ejecutar nuestro ejecutable, escribiremos en
+la línea de órdenes (suponemos que todo se ha llevado a cabo donde
+está ubicado el fichero <code>hola.hs</code>):</p>
+
+<pre><code>./hola
+</code></pre>
+
+<p>y al pulsar intro tendremos el cortés mensaje:</p>
+
+<pre><code>Hola ... mundo!
+</code></pre>
+
+<p>##Ejemplos</p>
+
+<p>Para ejemplificar el uso de Haskell podemos recurrir a funciones
+conocidas ya en los lenguaje imperativos y que produzcan fuerte
+contraste. Con nuestro editor preferido abriremos un fichero
+<code>example.hs</code> y le pondremos el siguiente contenido, que irá creciendo:</p>
+
+<pre><code>qsort [] = []
+qsort (x:xs) = qsort ([y | y &lt;- xs, y &lt; x]) ++ [x] ++ qsort ([y | y &lt;- xs, y &gt;= x])
+</code></pre>
+
+<p>o si se prefiere, el código más elaborado y eficaz:</p>
+
+<pre><code>qsort :: (Ord a) =&gt; [a] -&gt; [a]
+qsort [] = []
+qsort (x:xs) = qsort (filter (&lt; x) xs) ++ [x] ++ qsort (filter (&gt;= x) xs)
+</code></pre>
+
+<p>Ahora, si estamos ubicados con la consola en el directorio que
+contiene al fichero <code>example.hs</code>, tenemos dos opciones: abrir el
+intérprete y cargar el fichero <code>example.hs</code> o abrir el intérprete para
+él. La primera opción se materializa ejecutando:</p>
+
+<pre><code>ghci
+</code></pre>
+
+<p>pulsando intro y cuando aparezca el diálogo:</p>
+
+<pre><code>Last login: Sat Sep 27 17:59:09 on console
+iMac-de-miUsuario:~ my_login$ ghci
+GHCi, version 7.6.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Prelude&gt; 
+</code></pre>
+
+<p>entonces escribiremos:</p>
+
+<pre><code>Prelude&gt; :l example.hs
+</code></pre>
+
+<p>y al pulsar intro obtendremos el diálogo:</p>
+
+<pre><code>[1 of 1] Compiling Main             ( example.hs, interpreted )
+Ok, modules loaded: Main.
+*Main&gt; 
+</code></pre>
+
+<p>El retazo <code>Ok, modules loaded: Main.</code> indica que el fichero
+<code>example.hs</code> ha sido interpretado correctamente y el retazo de código
+<code>*Main&gt;</code> indica que el ambiente <code>Prelude</code> ha sido completado con las
+funciones, tipos de datos, clases, etc. recién interpretadas en
+<code>example.hs</code>.</p>
+
+<p>Ahora seremos capaces de ordenar una lista con nuestra función:</p>
+
+<pre><code>*Main&gt; qsort ([2,-1,5,3])
+[-1,2,3,5]
+*Main&gt;
+</code></pre>
+
+<p>¿No parece magnífico? Sin embargo no todo lo bello es apropiado. Lo
+mejor para ordenar es utilizar la función primitiva <code>sort</code>. Pero aquí
+surge el primer problema:</p>
+
+<pre><code>*Main&gt; sort([2,3,1])
+
+&lt;interactive&gt;:5:1:
+    Not in scope: `sort'
+    Perhaps you meant one of these:
+`sqrt' (imported from Prelude), `qsort' (line 1)
+*Main&gt;
+</code></pre>
+
+<p>Este mensaje significa, ni más ni menos, que la función sort no está
+en Prelude, ni por supuesto en example.hs. Para incluirla debemos
+cargar un módulo instalado por defecto en el árbol de Haskell que la
+contenga:</p>
+
+<pre><code>*Main&gt; :m + Data.List
+Prelude Data.List &gt;
+</code></pre>
+
+<p>y ahora podemos usar la función <code>sort</code> como sugeríamos antes. Pero
+obsérvese que hemos perdido nuestro contenido del fichero
+<code>example.hs</code>; ahora deberíamos recargarlo.</p>
+
+<p>A veces es útil tener información sobre funciones. Podemos hacer, por
+ejemplo:</p>
+
+<pre><code>*Main Data.List&gt; :t qsort
+qsort :: Ord a =&gt; [a] -&gt; [a]
+*Main Data.List&gt; :i qsort
+qsort :: Ord a =&gt; [a] -&gt; [a] -- Defined at example.hs:2:1
+*Main Data.List&gt; :i sort
+sort :: Ord a =&gt; [a] -&gt; [a] -- Defined in `Data.List'
+*Main Data.List&gt; 
+</code></pre>
+
+<p>Ahora sabemos que la línea</p>
+
+<pre><code>qsort :: Ord a =&gt; [a] -&gt; [a]
+</code></pre>
+
+<p>define el tipo de la función <code>qsort</code>; debemos leerla así: si <code>a</code> es un
+objeto incluido en la clase <code>Ord</code> de objetos, <code>qsort</code> asigna a una
+lista de objetos <code>a</code> otra lista de objetos <code>a</code>.</p>
+
+<p>Para importar varios módulos se puede proceder así:</p>
+
+<pre><code>iMac-de-miUsuario:~ my_login$ ghci 
+GHCi, version 7.6.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Prelude&gt; :m + Data.List Data.Char
+Prelude Data.List Data.Char&gt;
+Prelude Data.Char List&gt; :m - Data.Char
+Prelude Data.List&gt;
+</code></pre>
+
+<p>o también así:</p>
+
+<pre><code>iMac-de-miUsuario:~ my_login$ ghci 
+GHCi, version 7.6.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Prelude&gt; import Data.Char
+Prelude Data.Char&gt; import Data.List as List
+Prelude Data.Char List&gt; :m - Data.List
+Prelude Data.Char&gt;
+</code></pre>
+
+<p>Para saber más de las órdenes básicas del intérprete podemos hacer:</p>
+
+<pre><code>Prelude&gt; :h
+</code></pre>
+
+<p>Si queremos introducir nuestras funciones en el intérprete sin
+depender de un fichero del tipo example.hs, podemos. Habríamos de
+proceder así:</p>
+
+<pre><code>*Prelude&gt; let fac n = if n == 0 then 1 else n * fac (n-1)
+*Prelude&gt; fac 25
+15511210043330985984000000
+*Prelude&gt;
+</code></pre>
+
+<p>aunque lo mejor sería incluir en example.hs el código:</p>
+
+<pre><code>fac :: Integer -&gt; Integer
+fac 0 = 1
+fac n = n * fac (n-1) 
+</code></pre>
+
+<p>y recargar <code>example.hs</code>:</p>
+
+<pre><code>*Main Data.List&gt; :l examples.hs 
+[1 of 1] Compiling Main             ( examples.hs, interpreted )
+Ok, modules loaded: Main.
+*Main Data.List&gt; fac 25
+15511210043330985984000000
+*Main Data.List&gt; 
+</code></pre>
+
+<p>Si queremos una impresión de la estadística de tiempo/memoria tras
+cada evaluación, podemos ejecutar:</p>
+
+<pre><code>Prelude&gt; :set +s
+</code></pre>
+
+<p>desharemos lo hecho con la orden:</p>
+
+<pre><code>Prelude&gt; :unset +s
+</code></pre>
+
+<p>Recordemos que para salir del intérprete ejecutaremos:</p>
+
+<pre><code>Prelude&gt; :q
+</code></pre>
+
+<p>Para comentar una línea la hacemos preceder de la secuencia de
+caractéres &ldquo;&ndash;&rdquo; y para comentar un párrafo de código lo ponemos entre
+&ldquo;{-&rdquo; y &ldquo;-}&rdquo;:</p>
+
+<pre><code>-- esta línea está comentada
+
+{- este párrafo está comentado
+    por ser sólo una explicación -}
+</code></pre>
+
+<p>##Un ejemplo más elaborado</p>
+
+<p>De <a href="http://www.x.edu.uy/inet/IntHaskell98.pdf">D. José E. Labra G.</a>
+hemos tomado el contenido ligeramente modificado de los ficheros
+<a href="https://dl.dropboxusercontent.com/u/46506049/Pila.hs">Pila.hs</a> y
+<a href="https://dl.dropboxusercontent.com/u/46506049/Menu.hs">Menu.hs</a>. El
+segundo es un ejemplo de menú que importa y opera con los objetos del
+primero.</p>
+
+<p>Si queremos hacer un ejecutable con Menu.hs podemos operar de dos
+maneras. Suponemos que en la consola nos hemos colocado donde están
+los dos ficheros en cuestión. La primera forma sería:</p>
+
+<pre><code>ghc --make Menu.hs
+</code></pre>
+
+<p>y ahora podríamos ejecutar el ejecutable resultado con</p>
+
+<pre><code>./Menu
+</code></pre>
+
+<p>La segunda forma sería ejecutar consecutivamente las siguientes dos
+órdenes en la consola:</p>
+
+<pre><code>ghc -c -O Pila.hs Menu.hs
+ghc -o menu -O Pila.o Menu.o
+</code></pre>
+
+<p>y ahora podríamos ejecutar el ejecutable menu con</p>
+
+<pre><code>./Menu
+</code></pre>
+
+<p>La ventaja de esta última forma de proceder es que con la orden:</p>
+
+<pre><code>ghc -c -O Pila.hs Menu.hs
+</code></pre>
+
+<p>creamos los ficheros <code>Pila.o</code> y <code>Menu.o</code> que nos valdrían para
+pasarlos a otra parte del equipo que deba elaborar el fichero
+ejecutable <code>Menu</code>, pero que sin embargo no deba, o no pueda, conocer
+los ficheros <code>Menu.hs</code> y/o <code>Pila.hs</code>. Una vez hayan sido pasados los
+mencionados ficheros <code>Pila.o</code> y <code>Menu.o</code>, los receptores compondrían
+el fichero ejecutable menu mediante la orden de consola:</p>
+
+<pre><code>ghc -o menu -O Pila.o Menu.o
+</code></pre>
+
+<h2 id="ejecutar-sin-compilar-y-sin-interpretar">Ejecutar sin compilar y sin interpretar</h2>
+
+<p>Supongamos que tenemos un fichero llamado, por ejemplo,
+<code>fmapping_io.hs</code> y con el siguiente contenido:</p>
+
+<pre><code>import Data.Char 
+import Data.List 
+
+main = do line &lt;- fmap (intersperse '-' . reverse . map toUpper) getLine 
+          putStrLn line
+</code></pre>
+
+<p>Podríamos ejecutarlo como sigue:</p>
+
+<pre><code>iMac-de-miUsuario:~ my_login$ runhaskell fmapping_io.hs
+esto es una prueba
+
+A-B-E-U-R-P- -A-N-U- -S-E- -O-T-S-E
+</code></pre>
+
+<h2 id="la-principal-arma-de-haskell">La principal arma de Haskell</h2>
+
+<p>Como explican los autores en su libro
+<a href="http://www.lcc.uma.es/~pepeg/pfHaskell/index.html">Razonando con Haskell</a>,
+en muchos lenguajes imperativos (p. e. <code>C++</code>) con el mecanismo de paso
+por valor (<em>call by value</em>) siempre se evalúan los argumentos antes de
+la llamada. Una alternativa a este mecanismo es el paso por necesidad
+(<em>call by need</em>), en el cual se evalúa solamente los argumentos
+necesarios; el problema de tal mecanismo para los lenguajes
+imperativos es que su implementación es compleja.</p>
+
+<p>En el contexto de los lenguajes funcionales se habla de dos modos de
+evaluación: impaciente (eager) y perezosa (lazy); en el primer caso el
+evaluador hace todo lo que puede mientras que en el segundo hace
+solamente lo preciso. El mecanismo impaciente corresponde al paso por
+valor mientras que el perezoso al paso por necesidad.</p>
+
+<p>Le proponemos que tomen de nuevo su fichero <code>example.hs</code> y que
+incluyan en él el siguiente código:</p>
+
+<pre><code>desde :: Integer -&gt; [Integer]
+desde n = [n..]
+
+suma :: Integer -&gt; [Integer] -&gt; Integer
+suma 0 _ = 0
+suma n (x:xs) = x + suma (n-1) xs
+</code></pre>
+
+<p>La función desde, dado un valor entero n, entrega la lista de todos
+los números enteros superiores o iguales a n, ordenados en el orden de
+los números enteros según se avanza hacia el final de la lista. Así,
+<code>[0..]</code> es la lista en orden creciente de todos los números enteros
+comenzando en <code>0</code>: la lista de los números naturales en su propio
+orden.</p>
+
+<p>La función <code>suma</code> tiene dos argumento: un número entero (que pensamos
+será siempre un número natural), como primer argumento, y una lista de
+números enteros, como segundo argumento. Su labor es sumar las <code>n</code>
+primeras entradas de la lista argumento, y si ese <code>n</code> fuese <code>0</code>,
+ofrecer <code>0</code> como resultado; esto último es la condición de
+detención. Si se piensa bien, todo esto se puede entender como un
+bucle <code>while</code> de los lenguajes imperativos.</p>
+
+<p>Pero qué pasa si nuestra malicia natural nos lleva, por afán de
+diversión, a hacer una jugarreta al intérprete de Haskell, pasándole
+como segundo argumento una lista infinita. ¿Qué espera el lector?
+¿será éste el final de Haskell, de nuestra máquina y del tiempo
+relativista? Nada más lejos de la realidad y valga para ello el
+siguiente ejemplo:</p>
+
+<pre><code>ghci example.hs
+</code></pre>
+
+<p>y recibimos el diálogo siguiente, señal de que ¡todo ha ido bien por
+ahora!</p>
+
+<pre><code>GHCi, version 7.6.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+[1 of 1] Compiling Main             ( example.hs, interpreted )
+Ok, modules loaded: Main.
+</code></pre>
+
+<p>Como el coyote, probemos que la trampa está hecha y funciona &hellip; y
+atentos a ejecutar <code>Ctrl + C</code> inmediatamente después de <code>desde 0</code> o
+&hellip; esto no acabará realmente.</p>
+
+<pre><code>*Main&gt; desde 0
+[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,
+30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,
+57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,
+8^CInterrupted.
+</code></pre>
+
+<p>Seguidamente hagamos este inocente cálculo:</p>
+
+<pre><code>*Main&gt; 1 + 2 + 3 + 4 + 5
+15
+</code></pre>
+
+<p>Finalmente pedirle al correcaminos que caiga en la trampa del precipicio infinito:</p>
+
+<pre><code>*Main&gt; suma 5 (desde 1)
+15
+(0.00 secs, 1030416 bytes)
+*Main&gt;
+</code></pre>
+
+<p>Nos costará, si no conocemos de antes a Haskell, sobreponernos a la impresión: hemos pedidoque sume los primeros 5 números de una ¡lista infinita! y ¡lo ha hecho en 0.00 segundos! ¿Dónde está el truco? Ni más ni menos en que Haskell evalúa perezosamente y al recibir la orden:</p>
+
+<pre><code>*Main&gt; suma 5 (desde 1)
+</code></pre>
+
+<p>no ha confeccionado primero <code>desde 1</code>, tomado luego sus primeras 5 entrada y sumado finalmente para ofrecer el resultado <code>15</code>. En su lugar lo que hizo es calcular la primera entradade <code>desde 1</code>, separarla y mandar que le sea sumada la segunda entrada de <code>desde 1</code>, la cualpasa a calcular sabiendo que queda una selección menos que hacer, etc. El proceso continúa hasta que sabemos que no queda selección de entrada alguna que hacer ya en <code>desde 1</code> y entonces mandamos sumar <code>0</code> y damos la orden de parar de sumar, para seguidamente efectuar definitivamente la suma hilvanada durante todo este tiempo.</p>
+
+<p>La habilidad de Haskell: ¿para qué calcular <code>desde 1</code> y luego sumar sus 5 primeras entradas, si para nuestro propósito sólo son imprescindibles esas 5 entradas? ¡cuando sea necesario calcular/extraer más entradas de <code>desde 1</code>, ya lo haremos! ¡No nos precipitemos haciendo más trabajo del necesario! ¡Hagamos el sucintamente imprescindible no sea que nos cansemos &hellip; eh!</p>
+
+<p>Con el código anterior hay un pequeño problema, que realmente sólo es aparente:</p>
+
+<pre><code>*Main&gt; suma 5 [1,2,3,4]
+*** Exception: example.hs:(23,1)-(24,33): Non-exhaustive patterns in function suma
+
+*Main&gt;
+</code></pre>
+
+<p>Como vemos se genera una excepción, que podría ser capturada
+convenientemente. Un código alternativo para la función suma podría
+ser:</p>
+
+<pre><code>suma :: Integer -&gt; [Integer] -&gt; Integer
+suma 0 _         = 0
+suma _ []        = error &quot;lista demasiado corta&quot;
+suma n (x:xs) = x + suma (n-1) xs
+</code></pre>
+
+<p>que ahora proporciona el siguiente diálogo:</p>
+
+<pre><code>*Main&gt; suma 5 [1,2,3,4]
+*** Exception: lista demasiado corta
+
+*Main&gt; suma 5 [1,2,3,4,5]
+15
+*Main&gt; suma 5 [1,2,3,4,5,6]
+15
+*Main&gt; suma 5 (desde 1)
+15
+*Main&gt;
+</code></pre>
+
+<p>De nada serviría la evaluación perezosa con un código como éste:</p>
+
+<pre><code>desde :: Integer -&gt; [Integer]
+desde n = [n..]
+
+longitud :: [a] -&gt; Integer
+longitud [] = 0
+longitud (x:xs) = 1 + longitud xs
+
+sumaB :: Integer -&gt; [Integer] -&gt; Integer
+sumaB n lst@(x:xs)
+ | n == 0    = 0
+ | n &gt; len   = error &quot;lista demasiado corta.&quot;
+ | otherwise = x + sumaB (n-1) xs
+             where len = longitud lst
+</code></pre>
+
+<p>cuando <code>lst</code> es infinita:</p>
+
+<pre><code>*Main&gt; suma 5 (desde 1)
+</code></pre>
+
+<p>sencillamente no funciona, pues la condición de la ejecución exige
+hacer el cálculo de una longitud, el cual no acaba.</p>
+
+<p>Otro gran recurso en la programación funcional con Haskell es la
+utilización en las funciones de &ldquo;argumento con patrón&rdquo;. En la línea
+anterior:</p>
+
+<pre><code>suma n (x:xs) = x + suma (n-1) xs
+</code></pre>
+
+<p>el segundo argumento de la función <code>suma</code>, a saber <code>(x:xs)</code>, es
+aportado con un patrón, lo que permite un uso suyo eficiente dentro de
+la definición del caso: <code>x + suma (n-1) xs</code></p>
+
+<p>Así es Haskell.</p>
+
+<p>##Nuestro reto habitual</p>
+
+<p>Esta vez consiste en pensar qué significa el siguiente código Haskell,
+que podríamos poner en nuestro fichero Criba.hs, cargar en el
+intérprete y ejecutar:</p>
+
+<pre><code>module Criba (module Criba) where
+
+criba :: [Integer] -&gt; [Integer]
+criba (p:xs) = [x | x &lt;- xs, p `noDivideA` x]
+                      where m `noDivideA` n = mod n m /= 0
+
+primos :: [Integer]
+primos = map head (iterate criba [2..])
+
+primosEq :: [Integer]
+primosEq = map head  lprimos 
+           where lprimos = [2..] : map criba lprimos 
+</code></pre>
+
+<p>sin ánimo de producir vértigo.</p>
+
+<p>No nos emocionemos demasiado, pues aunque es muy elegante no es
+eficiente ni la criba real; es solamente un código de gran valor
+pedagógico.</p>
+
+<p>##Enlaces de interés para saber más por sí mismo</p>
+
+<p>Hemos dado la primera clase. Ahora:</p>
+
+<ul>
+<li>The Glorious Glasgow Haskell Compilation System <a href="https://downloads.haskell.org/~ghc/7.8.2/docs/html/users_guide/">User&rsquo;s Guide</a>, Version 7.8.2</li>
+<li>Una <a href="http://www.haskell.org/haskellwiki/Es/Introduccion">introducción a Haskell</a> telegráfica y en español.</li>
+<li>Podemos <a href="http://www.haskell.org/haskellwiki/Learn_Haskell_in_10_minutes">echar 10 minutos más</a> bien empleados y aprenderlo casi todo.</li>
+<li>Información técnica <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/">sobre los módulos</a>. Una página <a href="http://zvon.org/other/haskell/Outputglobal/index.html">similar</a>, más antigua pero de mucho interés.</li>
+<li><a href="http://osl2.uca.es/wikihaskell/index.php/P%C3%A1gina_principal">Wikihaskell</a> de la UCA.</li>
+<li>Una guía de usuario para <a href="http://www.haskell.org/cabal/users-guide/">Cabal</a> y la guía de Cabal de <a href="http://osl2.uca.es/wikihaskell/index.php/Biblioteca_de_empaquetamiento_Cabal">Wikihaskell</a>.</li>
+<li><a href="http://learnyouahaskell.com/">Learn You a Haskell for Great Good</a> de Miran Lipovaca.</li>
+<li><a href="http://aprendehaskell.es/">Aprende Haskell</a>, por el bien de todos.</li>
+<li>El <a href="http://book.realworldhaskell.org/read/">mundo real</a> de Haskell.</li>
+<li><a href="http://www.lcc.uma.es/~pepeg/pfHaskell/index.html">Razonando con Haskell</a>. Un curso sobre programación funcional.</li>
+<li>Una <a href="http://www.haskell.org/tutorial/">introducción amable</a> a Haskell.</li>
+</ul>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

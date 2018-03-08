@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Haskell on </title>
+    <link>https://wildunix.es/tags/haskell/</link>
+    <description>Recent content in Haskell on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Fri, 11 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>El Modelo M4 de la Máquina Enigma</title>
+      <link>https://wildunix.es/posts/el-modelo-m4-de-la-maquina-enigma/</link>
+      <pubDate>Fri, 11 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/el-modelo-m4-de-la-maquina-enigma/</guid>
+      <description>Resumen de la Evolución de la Máquina Enigma Desde principios del siglo 20, con el auge de la comunicación inalámbrica, resultó obvia la necesidad de ocultar la información en el momento de la transmisión. Por aquel tiempo los métodos criptográficos &amp;ldquo;a mano&amp;rdquo; habían revelado su inutilidad y los ingenieros estaban a la busca de máquinas de cifrado. El recurso inmediato en la era analógica era el rotor. En 1917 Edward Hugh Hebern desarrolló una máquina de cifrado de discos en rotación, cada uno de los cuales llevaba a cabo una sustitución.</description>
+    </item>
+    
+    <item>
+      <title>Instalar TeX Live en Ubuntu, Mac OS y Windows</title>
+      <link>https://wildunix.es/posts/instalar-tex-live-en-ubuntu-mac-os-y-windows/</link>
+      <pubDate>Fri, 11 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-tex-live-en-ubuntu-mac-os-y-windows/</guid>
+      <description>Introducción Es incontrovertible la gran potencia de edición que ofrece LaTeX, desarrolle usted su actividad en las letras o en las ciencias; los primeros tiene la potencia sin la dificultad, con lo que todo son ganacias.
+Para concer más detalles sobre el sistema y sus autores, Donald E. Knuth y Leslie Lamport, visite la entrada de LaTeX en la Wikipedia.
+Como es bien sabido, el software que se instala en Ubuntu/Debian con apt-get es a menudo antiguo.</description>
+    </item>
+    
+    <item>
+      <title>El patron (n&#43;k) en Haskell a partir de la versión 7.0.3</title>
+      <link>https://wildunix.es/posts/el-patron-nk-en-haskell-a-partir-de-la-version-703/</link>
+      <pubDate>Sun, 27 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/el-patron-nk-en-haskell-a-partir-de-la-version-703/</guid>
+      <description>Introducción Con las versiones de Haskell provistas en los Ubuntu anteriores a Ubuntu 11.10, los programadores de Haskell han venido usando un truco permitido, aunque no muy ortodoxo, que era incluir el patrón (n+k) en las definiciones de funciones, a la izquierda del igual definitorio. Por ejemplo, la implementación del factorial era entendida por muchos así:
+factorial :: Integer -&amp;gt; Integer factorial 0 = 1 factorial (n+1) = (n+1) * factorial n  en lugar de:</description>
+    </item>
+    
+    <item>
+      <title>Mi Primera Clase de Haskell</title>
+      <link>https://wildunix.es/posts/mi-primera-clase-de-haskell/</link>
+      <pubDate>Sat, 24 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/mi-primera-clase-de-haskell/</guid>
+      <description>Introducción Hay un paradigma de programación que se denomina &amp;ldquo;programación declarativa&amp;rdquo;. Surge en contraposición a la &amp;ldquo;programación imperativa&amp;rdquo;, que en sus comienzos estaba representada por lenguajes muy próximos a las peculiaridades de la propia máquina: operaciones artiméticas simples, instrucciones de acceso a la memoria, etc. Ese tipo de programas resultan a menudo crípticos, llegando a impedir su comprensión incluso a programadores entrenados, aunque en la actualidad los lenguajes imperativos han atenuado mucho este efecto.</description>
+    </item>
+    
+  </channel>
+</rss>

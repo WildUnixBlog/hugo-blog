@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Instalar TeX Live en Ubuntu, Mac OS y Windows &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Instalar TeX Live en Ubuntu, Mac OS y Windows</h1>
+        <div class="post-meta">
+            <time datetime="11 August 2017">
+                11 August 2017
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Es incontrovertible la gran potencia de edición que ofrece LaTeX,
+desarrolle usted su actividad en las letras o en las ciencias; los
+primeros tiene la potencia sin la dificultad, con lo que todo son
+ganacias.</p>
+
+<p>Para concer más detalles sobre el sistema y sus autores, Donald
+E. Knuth y Leslie Lamport, visite la entrada de
+<a href="https://es.wikipedia.org/wiki/LaTeX">LaTeX en la Wikipedia</a>.</p>
+
+<p>Como es bien sabido, el software que se instala en Ubuntu/Debian con
+apt-get es a menudo antiguo. Es el caso de la distribución de Tex Live
+de LaTeX al instalar Ubuntu 14.04 LTS, con apt-get se instalaba TeX Live
+2013/Debian pudiendo bien estar viva ya la versión TeX Live 2014 u
+otra posterior.</p>
+
+<p>En este post explicaremos como instalar la última distribución de TeX
+Live en nuestro Ubuntu o cualquier otro Linux. Para ello evitaremos
+obviamente el uso de <code>apt-get</code> o herramientas equivalentes según el
+sistema.</p>
+
+<p>Realmente la decisión de no utilizar <code>apt-get</code> en Ubuntu para instalar
+TeX Live conlleva, como diremos, no instalar con <code>apt-get</code>: <code>auctex</code>,
+<code>catdvi</code>, <code>sagemath</code>, etc.</p>
+
+<h2 id="instalar-tex-live-en-ubuntu-sin-usar-apt-get">Instalar TeX Live en Ubuntu sin usar <code>apt-get</code></h2>
+
+<p>Instalación de TeX Live</p>
+
+<p><code>texlive</code> es nuestra distribución preferida de LaTeX. Resulta penoso
+ver como con nuestra instalación de Ubuntu, si instalamos texlive con
+<code>apt-get</code>, casi siempre instalamos una versión antigua de nuestro LaTeX.</p>
+
+<p>Para evitarlo podemos hacer una instalación manual de texlive por
+medio de las siguientes instrucciones.  Lo primero es instalar
+<code>perl-tk</code>:</p>
+
+<pre><code>sudo apt-get install perl-tk
+</code></pre>
+
+<p>seguidamente, según figura en
+<a href="https://www.tug.org/texlive/acquire-netinstall.html">Installing TeX Live over the Internet</a>,
+podemos
+<a href="https://www.tug.org/texlive/acquire-netinstall.html">bajar el instalador</a>
+para Unix: un pequeño programita que nos facilita la instalación.  Si
+se prefiere algo universal podemos
+<a href="http://mirror.ctan.org/systems/texlive/tlnet/install-tl.zip">bajar este otro instalador</a>,
+pero no es necesario ni recomendable en modo alguno para nuestro
+Ubuntu. Suponiendo que tenemos ya <code>install-tl-unx.tar.gz</code>, abrimos la
+consola y vamos al lugar donde se ha ubicado, supongamos para fijar
+ideas que es <code>/Descargas</code> tras lo que ejecutaremos</p>
+
+<pre><code>tar -xf install-tl-unx.tar.gz
+</code></pre>
+
+<p>colgando de <code>/Descargas</code>, tras la descopresión, se habrá generado un directorio con
+un nombre algo así como éste:</p>
+
+<pre><code>install-tl-20150125
+</code></pre>
+
+<p>entrando en ese directorio (<code>mi_usuario</code> es como habitualmente el nombre
+de nuestra cuenta en nuestro equipo)</p>
+
+<pre><code>cd /home/mi_usuario/Descargas/install-tl-20150125
+</code></pre>
+
+<p>(cada cual sustituirá <code>mi_usuario</code> e <code>install-tl-20150125</code>œ por lo que
+proceda en su situación) y seguidamente ejecutamos lo siguiente:</p>
+
+<pre><code>sudo ./install-tl -gui perltk
+</code></pre>
+
+<p>Se abrirá una ventana titulada <code>Install-tl</code> con la que se puede
+adecuar a voluntad las condiciones de la instalación.  Recomendamos
+firmemente hacer sólo un cambio, y no dejar de hacerlo: pulsar en el
+botón &ldquo;Cambiar&rdquo; del último apartado titulado &ldquo;Crear enlaces simbólicos
+en los directorios de sistema&rdquo;, pulsar en el botón adjunto al epígrafe
+&ldquo;crear enlaces simbólicos en los directorios estándar&rdquo; (se pondrá
+rojo) de la pequeña subventanita que se abrirá y finalmente pulsar en
+el botón de ésta &ldquo;Aceptar&rdquo;. Con ello mandamos crear los
+importantísimos enlaces simbólicos (esto se hace ya automáticamente):</p>
+
+<pre><code>ficheros ejecutables en: /usr/local/bin
+páginas de manual en: /usr/local/share/man
+información en: /usr/local/share/info
+</code></pre>
+
+<p>Antes figuraba junto al epígrafe &ldquo;Crear enlaces simbólicos en los
+directorios de sistema&rdquo; de la ventana principal la palabra &ldquo;No&rdquo; y
+ahora figura la palabra &ldquo;Sí&rdquo;. Pulsamos tras cerciorarnos de ello el
+botón con la inscripción &ldquo;Instalar Tex Live&rdquo;.  Ahora comienza un
+proceso de instalación que puede durar algún tiempo. Cuando acabe
+actualizaremos lo instalado desde la consola con las órdenes:</p>
+
+<pre><code>sudo tlmgr update --self
+sudo tlmgr update --all
+</code></pre>
+
+<p>y periódicamente podemos, y debemos, repetir estas dos órdenes para
+mantener nuestro sistema actualizado. Podemos consultar el uso de
+<code>tlmgr</code> en <a href="https://www.tug.org/texlive/doc/tlmgr.html">este manual</a>.</p>
+
+<h2 id="instalar-texlive-en-mac-os">Instalar Texlive en Mac OS</h2>
+
+<p>La distribución TeX Live para Mac OS viene servida desde el sitio
+oficial de <a href="https://tug.org/mactex/">MacTeX</a>, donde hay instrucciones
+detalladas aunque el proceso no tiene complicación alguna &ldquo;dejándose
+llevar&rdquo; y leyendo las instrucciones; el instalador es
+<a href="https://tug.org/mactex/mactex-download.html">MacTeX.pkg</a>.</p>
+
+<p>Nosotros instalaríamos previamente <code>Xcode</code> desde el Mac App Store y
+seguidamente <code>Command Line Tools</code>. Para hacer esto último, podemos
+<a href="http://osxdaily.com/2014/02/12/install-command-line-tools-mac-os-x/">ejecutar en la terminal</a>:</p>
+
+<pre><code>xcode-select --install
+</code></pre>
+
+<p>y dejarse llevar.</p>
+
+<h2 id="instalar-texlive-en-windows">Instalar Texlive en Windows</h2>
+
+<h3 id="en-windows-7">En Windows 7</h3>
+
+<p>Para la instalación en Windows 7, siga las siguientes instrucciones:</p>
+
+<ul>
+<li><p>Descargue <code>install-tl.zip</code> de
+<a href="http://tug.org/texlive/acquire-netinstall.html">http://tug.org/texlive/acquire-netinstall.html</a>
+y descomprímalo en cualquier lugar de su preferencia. Al acabar
+podrá borrar lo que resulta de esta descompresión.</p></li>
+
+<li><p>Al descomprimir <code>install-tl</code> ir a la carpeta con nombre similar a
+<code>install-tl-20162017</code>.</p></li>
+
+<li><p>Desactive temporalmente el antivirus hasta que concluya la instalación
+y procure que no salte el salvapantallas o se active la hibernación
+del equipo. Todo ello podría impedir o dificultar la instalación.</p></li>
+
+<li><p>Sobre <code>install-tl-windows.bat</code>, pulse botón derecho del ratón.</p></li>
+
+<li><p>Haga clic sobre &ldquo;Ejecutar como administrador&rdquo;.</p></li>
+
+<li><p>Responda &ldquo;Sí&rdquo; a la pregunta: ¿Desea permitir &hellip; en el equipo?</p></li>
+
+<li><p>Se abrirá la ventana emergente <sup>1</sup>&frasl;<sub>5</sub>; ponga tic sobre &ldquo;Change default
+repository&rdquo; y pulse &ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>En la ventana 1-<sup>1</sup>&frasl;<sub>5</sub> desplegar posibilidades de &ldquo;Mirror&rdquo; y elegir
+&ldquo;Spain <a href="http://osl.ugr.es/CTAN">http://osl.ugr.es/CTAN</a>&rdquo; o cualquier
+otro repositorio si éste no estuviese disponible; pulse ahora
+&ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>En la ventana que emergerá <sup>2</sup>&frasl;<sub>5</sub> y recomienda &ldquo;Ruta de instalación&rdquo;, NO
+cambie y pulse en &ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>No toque nada en la siguiente ventana que se abre <sup>3</sup>&frasl;<sub>5</sub> y pulse
+&ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>En la ventana siguiente <sup>4</sup>&frasl;<sub>5</sub> pulse sobre &ldquo;Instalar&rdquo;.</p></li>
+
+<li><p>La ventana <sup>5</sup>&frasl;<sub>5</sub> es la de instalación; espere a que concluya.</p></li>
+</ul>
+
+<h3 id="en-windows-10">En Windows 10</h3>
+
+<ul>
+<li><p>Descargue <code>install-tl.zip</code> de
+<a href="http://tug.org/texlive/acquire-netinstall.html">http://tug.org/texlive/acquire-netinstall.html</a>
+y descomprímalo en cualquier lugar de su preferencia. Al acabar
+podrá borrar lo que resulta de esta descompresión.</p></li>
+
+<li><p>Vaya a la carpeta generada al descomprimir <code>install-tl</code>; será algo
+así como <code>install-tl-20162017</code>.</p></li>
+
+<li><p>Desactive temporalmente el antivirus hasta que concluya la instalación
+y procure que no salte el salvapantallas o se active la hibernación
+del equipo. Todo ello podría impedir o dificultar la instalación.</p></li>
+
+<li><p>Sobre <code>install-tl-windows.bat</code> (puede que en su equipo no esté
+visible la extensión <code>.bat</code>), pulse botón derecho del ratón.</p></li>
+
+<li><p>Haga clic sobre &ldquo;Ejecutar como administrador&rdquo;.</p></li>
+
+<li><p>Responda &ldquo;Sí&rdquo; en la ventana &ldquo;¿Quieres permitir que esta aplicación
+haga cambios en el dispositivo?&ldquo;.</p></li>
+
+<li><p>Se abrirá la ventana emergente <sup>1</sup>&frasl;<sub>5</sub>; ponga tic sobre &ldquo;Change default
+repository&rdquo; y pulse &ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>En la ventana 1-<sup>1</sup>&frasl;<sub>5</sub> desplegar posibilidades de &ldquo;Mirror&rdquo; y elegir
+&ldquo;Spain <a href="http://osl.ugr.es/CTAN">http://osl.ugr.es/CTAN</a>&rdquo; o cualquier
+otro repositorio si éste no estuviese disponible; pulse ahora
+&ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>En la ventana que emerge <sup>2</sup>&frasl;<sub>5</sub> y recomienda &ldquo;Ruta de instalación&rdquo;, NO
+cambie y pulse en &ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>No toque nada en la siguiente ventana que se abre, la <sup>3</sup>&frasl;<sub>5</sub>, y pulse
+&ldquo;Siguiente&rdquo;.</p></li>
+
+<li><p>En la ventana siguiente <sup>4</sup>&frasl;<sub>5</sub> pulse sobre &ldquo;Instalar&rdquo;</p></li>
+
+<li><p>La ventana <sup>5</sup>&frasl;<sub>5</sub> es la de instalación, espere a que concluya.</p></li>
+</ul>
+
+<h2 id="instalación-de-gnu-emacs">Instalación de <code>GNU Emacs</code></h2>
+
+<p>Han pasado décadas y cada día nos parece más actual, práctico y
+eficiente, para quien necesita escribir realmente a LaTeX, el sabor
+<code>LaTeX + emacs</code>. Un conocido muy versado en LaTeX elogió una vez al
+anciano editor diciendo: &ldquo;emacs es el editor del pasado venido del
+futuro&rdquo;; creemos que acertó.</p>
+
+<h3 id="instalación-de-emacs-en-ubuntu">Instalación de <code>emacs</code> en Ubuntu</h3>
+
+<p>Está claro que no es conveniente instalar auctex mediante apt-get,
+pues se llevaría a cabo una instalación paralela de LaTeX que en modo
+alguno conviene tener en el árbol del sistema interactuando con la
+instalación &ldquo;manual&rdquo; antes realizada.</p>
+
+<p>No hay problema en instalar <code>emacs</code> disfrutando de la comodidad de
+<code>apt-get</code>; eso sí, instalaremos la última versión estable ofrecida (al
+momento de escribir el post era la Emacs 24.3.1). Para ello:</p>
+
+<pre><code>sudo apt-get install emacs24
+</code></pre>
+
+<p>La adecuación de <code>emacs</code> es similar a la de Aquamacs, explicada más
+abajo.</p>
+
+<h3 id="instalación-de-emacs-en-windows">Instalación de <code>emacs</code> en Windows</h3>
+
+<p>Encontrará las instrucciones de descarga en:</p>
+
+<p><a href="http://www.gnu.org/software/emacs/download.html">http://www.gnu.org/software/emacs/download.html</a></p>
+
+<p>y podrá ser descargado del uno de los nexos indicados en dicha página.
+Hemos usado:</p>
+
+<p><a href="http://ftp.gnu.org/gnu/emacs/windows/">http://ftp.gnu.org/gnu/emacs/windows/</a></p>
+
+<p>Hemos bajado y descomprimido el fichero
+<code>emacs-25.1-2-x86_64-w64-mingw32.zip</code>. Seguidamente haga lo siguiente:</p>
+
+<ul>
+<li><p>Se genera el directorio <code>bin</code></p></li>
+
+<li><p>Ponga el cursor sobre <code>runemacs.exe</code> (puede que en su sistema sólo
+vea <code>runemacs</code> porque lo tenga modificado para no mostrar las
+extensiones de los ficheros) y pulse botón derecho y luego sobre
+&ldquo;Abrir&rdquo;. Así probará que funciona.</p></li>
+
+<li><p>Mueva el directorio <code>bin</code> que resulta de descomprimir a la
+carpeta: <code>C:\Archivos de Programa\emacs\bin</code>, por ejemplo.</p></li>
+
+<li><p>Ponga el cursor sobre <code>runemacs</code> o <code>runemacs.exe</code> y pulse botón
+derecho, seguidamente pulse sobre <code>Crear acceso directo</code>.</p></li>
+
+<li><p>Surgirá <code>runemacs - Acceso directo</code>; como acceso directo que es,
+arrástrelo a un lugar cómodo para poder usarlo.</p></li>
+</ul>
+
+<h3 id="instalación-de-auctex">Instalación de <code>auctex</code></h3>
+
+<p>Una vez que tengamos instalado TeX Live y <code>emacs</code>, pasaremos a
+instalar <code>auctex</code>. Hay muchas formas de hacerlo, pero la que
+preferimos nosotros por su facilidad, su efectividad y la
+universalidad es la siguiente:</p>
+
+<ul>
+<li><p>Abra <code>emacs</code></p></li>
+
+<li><p>Pulse la secuencia <code>M-x list-packages</code> (por supuesto <code>M-x</code> significa
+<code>Alt-x</code>)</p></li>
+</ul>
+
+<p>Si no queremos, o no podemos, usar el ratón:</p>
+
+<ul>
+<li><p>lleve el cursor hasta <code>auctex</code></p></li>
+
+<li><p><code>Ctrl-x o</code> (lleva a la segunda subventana que acaba de abrirse),
+<code>Ctrl-i</code> (lleva al botón de &ldquo;Install&rdquo;), <code>Intro</code>, seguidamente <code>y</code>
+para responder y finalmente <code>Intro</code>.</p></li>
+</ul>
+
+<p>Si prefiere usar el ratón:</p>
+
+<ul>
+<li><p>haga clic sobre <code>auctex</code></p></li>
+
+<li><p>haga clic sobre el botón de &ldquo;Install&rdquo; en la subventana que se ha abierto</p></li>
+
+<li><p>haga clic sobre el botón de &ldquo;Yes&rdquo;</p></li>
+</ul>
+
+<p>En cualquiera de los casos, sabremos que ha acabado el proceso cuando
+veamos en la subventana inferior el mensaje &ldquo;Installed&rdquo;.</p>
+
+<h3 id="instalación-de-emacs-en-mac-os">Instalación de <code>emacs</code> en Mac OS</h3>
+
+<p>Para Mac OS existe una excelente versión de <code>emacs</code> llamada
+<a href="http://aquamacs.org/"><code>Aquamacs</code></a>. La
+<a href="http://aquamacs.org/download.shtml">descarga de Aquamacs</a> proporciona
+un fichero <code>.dmg</code> que se instala en la forma usual y archiconocida de
+instalar estos paquetes en nuestro Mac OS. La configuración puede ser
+hecha a gusto del usuario. Sugerimos realizar las siguientes
+operaciones:</p>
+
+<pre><code>Options &gt; Option, Command, Meta keys &gt; ... Meta  &amp; Spa
+</code></pre>
+
+<p>con esto hacemos que reconozca nuestro teclado español. La selección
+del molde de letra preferida hay que hacerla para cada tipo de
+fichero, pudiendo tener un molde de letra para cada uno de ellos. Por
+ejemplo, para ficheros <code>.tex</code> nos ha gustado el juego <code>Monaco</code> (una
+alternativa interesante es
+<a href="http://www.myfontfree.com/download-simsun-zip75734.htm">SimSun</a>), así
+que abrimos uno de esto ficheros que tengamos a mano y hacemos:</p>
+
+<pre><code>Options &gt; Appearance &gt; Fonts for Latex-Mode...
+</code></pre>
+
+<p>seleccionamos en la caja que se abre los siguiente parámetros:</p>
+
+<pre><code>All Fonts + Monaco + Normal + 16
+</code></pre>
+
+<p>Si hubiésemos cargado un fichero <code>.txt</code>, aparecería &ldquo;Fonts for
+Text-Mode&hellip;&rdquo; en lugar de &ldquo;Fonts for Latex-Mode&hellip;&rdquo;. Así procedemos
+con todos los tipos de fichero que queramos, eligiendo a nuestro gusto
+la fuente de letra y su tamaño.</p>
+
+<p>Seguidamente seleccionamos la codificación que nos guste; recomendamos
+fuertemente elegir <code>UTF-8</code>. Para ello:</p>
+
+<pre><code>Options &gt; Language &gt; Set Language Environment &gt; UTF-8
+</code></pre>
+
+<p>Otra opción interesante es:</p>
+
+<pre><code>Options &gt; View &gt; Size Indication
+</code></pre>
+
+<p>Finalmente, para guardar todas las opciones elegidas, hacemos:</p>
+
+<pre><code>Options &gt; Save Options
+</code></pre>
+
+<p>No olvidemos desmontar el disco virtual de instalación de Aquamacs que
+surgió al principio de todo, cuando hicimos doble clic sobre
+&ldquo;Aquamacs-Emacs-3.3.dmg&rdquo;. Esto se consigue haciendo clic sobre el
+icono del disco virtual &ldquo;Aquamacs Emacs&rdquo; que aparece sobre el tapiz de
+nuestra mac mientras tenemos pulsada la tecla &ldquo;Ctrl&rdquo;, seleccionando
+luego &ldquo;Expulsar Aquamacs Emacs&rdquo;.</p>
+
+<h3 id="alternativas-a-emacs">Alternativas a <code>emacs</code></h3>
+
+<p>Muchos &ldquo;usuarios&rdquo; prefieren instalar como editor para LaTeX la
+utilidad Texmaker. Otros usuarios prefieren
+<a href="https://www.sublimetext.com/3">Sublime Text 3</a> o
+<a href="https://atom.io/">Atom</a>. Puede usar eso como alternativa a <code>emacs</code> o
+cualquier otra utilidad que le sugieran por ahí entre mil
+alternativas.</p>
+
+<p>En cualquier caso elija algo que no le haga prisionero del ratón, pues
+en tal caso su mano pasará más tiempo en el ratón que en el teclado y
+ello dificultará la edición. Recomendamos firmemente usar un editor
+con una gran colección de atajos de teclado, tipo <code>emacs</code>, de forma
+que pudiera escribir sin la ayuda del ratón.</p>
+
+<h2 id="sharelatex">Sharelatex</h2>
+
+<p>Conviene usar LaTeX en una instalación nativa en su ordenador, pero si
+no la tuviera a mano considere abrir una cuenta y usar
+<a href="https://www.sharelatex.com?r=1412eb69&amp;rm=d&amp;rs=b">Sharelatex</a> por sus
+innegables ventajas.</p>
+
+<h2 id="muy-importante">Muy importante</h2>
+
+<p>Si es usuario de <code>sagemath</code> en Linux, puede no ser conveniente
+instalar esta utilidad desde repositorio, pues ello significará una
+instalación paralela de LaTeX que quedará inconvenientemente
+superpuesta a la anteriormente hecha. La alternativa es la instalación
+manual, que es muy limpia y está explicada con sumo detalle en
+<a href="https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/">éste nuestro post</a>.</p>
+
+<p>Por la misma razón deberemos evitar instalar catdvi.</p>
+
+<h2 id="nexos-de-interés">Nexos de Interés</h2>
+
+<p><a href="http://www-cs-faculty.stanford.edu/~knuth/">Donald E. Knuth (高德纳)</a></p>
+
+<p><a href="https://www.ctan.org/">Comprehensive TeX Archive Network (CTAN)</a></p>
+
+<p><a href="http://www.latextemplates.com/">LaTeX Templates</a></p>
+
+<p><a href="http://www.tug.dk/FontCatalogue/">The LaTeX Font Catalogue</a></p>
+
+<p><a href="https://en.wikibooks.org/wiki/LaTeX">LaTeX en Wikibooks</a></p>
+
+<p><a href="http://tex.stackexchange.com/">TeX en stackexchange</a></p>
+
+<p><a href="http://tex.stackexchange.com/questions/85904/showcase-of-beautiful-title-page-done-in-tex">Modelos de Portadas</a></p>
+
+<p><a href="http://www.texample.net/tikz/">Tikz</a></p>
+
+<p><a href="http://www.fcaglp.unlp.edu.ar/~observacional/manuales/emacs_man.pdf">Brevísima Introducción a Emacs de D. Hector M. Mora Escobar</a></p>
+
+<p><a href="http://wwwae.ciemat.es/~oglez/webcms/oginfo/combinaciones_emacs.html">http://wwwae.ciemat.es/~oglez/webcms/oginfo/combinaciones_emacs.html</a></p>
+
+<p><a href="http://www.maths.manchester.ac.uk/~gb/emacs/installauctex.pdf">http://www.maths.manchester.ac.uk/~gb/emacs/installauctex.pdf</a></p>
+
+<p><a href="http://www.gnu.org/software/auctex/">http://www.gnu.org/software/auctex/</a></p>
+
+<p><a href="https://www.gnu.org/software/auctex/manual/auctex.index.html">https://www.gnu.org/software/auctex/manual/auctex.index.html</a></p>
+
+<p><a href="http://www.emacswiki.org/emacs/AUCTeX">http://www.emacswiki.org/emacs/AUCTeX</a></p>
+
+<p><a href="http://www.blackhats.es/wordpress/?p=209">http://www.blackhats.es/wordpress/?p=209</a></p>
+
+<p><a href="https://support.google.com/chrome/answer/157179?hl=es">https://support.google.com/chrome/answer/157179?hl=es</a></p>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+<h2 id="posdata">Posdata</h2>
+
+<p>La instalación de TeX Live aquí explicada soluciona el problema que
+presenta el editor Atom con los paquetes añadidos:</p>
+
+<ul>
+<li>latex</li>
+<li>language-latex</li>
+</ul>
+
+<p>al intentar compilar un fichero <code>.tex</code>, arrojando el mensaje de error:</p>
+
+<pre><code>TypeError: Cannot read property 'outputFilePath' of undefined
+at /home/miUsuario/.atom/packages/latex/lib/latex.coffee:63:24
+at /home/miUsuario/.atom/packages/latex/lib/builders/latexmk.coffee:17:9
+at ChildProcess.exithandler (child_process.js:752:5)
+at ChildProcess.emit (events.js:110:17)
+at maybeClose (child_process.js:1013:16)
+at Socket. (child_process.js:1181:11)
+at Socket.emit (events.js:107:17)
+at Pipe.close (net.js:461:12)
+</code></pre>
+
+<p>y que ha sido explicado en el &ldquo;issue outputFilePath #37&rdquo; de GitHub
+sobre el editor Atom.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

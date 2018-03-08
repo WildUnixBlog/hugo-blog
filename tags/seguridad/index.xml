@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Seguridad on </title>
+    <link>https://wildunix.es/tags/seguridad/</link>
+    <description>Recent content in Seguridad on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Mon, 14 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/seguridad/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Almacenar contraseñas de forma segura</title>
+      <link>https://wildunix.es/posts/almacenar-contrasenas-de-forma-segura/</link>
+      <pubDate>Mon, 14 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/almacenar-contrasenas-de-forma-segura/</guid>
+      <description>Introducción Cada vez son mas frecuentes los ataques a sitios webs con la pretesión de apoderarse de grandes cantidades de contraseñas, para aprovechar el error que comete mucha gente de usar la misma contraseña en distintos sitios de internet.
+Lo recomendable es usar distintas contraseñas para cada servicio que utilicemos, además de cumplir ciertos requisitos como tener una longitud considerable o incluir caracteres de distinto tipo; pero a medida que acumulamos contraseñas se vuelve cada vez más difícil recordarlas y es frecuente que optar por repetir contraseñas.</description>
+    </item>
+    
+  </channel>
+</rss>

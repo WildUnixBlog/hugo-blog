@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Almacenar contraseñas de forma segura &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Almacenar contraseñas de forma segura</h1>
+        <div class="post-meta">
+            <time datetime="14 August 2017">
+                14 August 2017
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Cada vez son mas frecuentes los ataques a sitios webs con la pretesión
+de apoderarse de grandes cantidades de contraseñas, para aprovechar el
+error que comete mucha gente de usar la misma contraseña en distintos
+sitios de internet.</p>
+
+<p>Lo recomendable es usar distintas contraseñas para cada servicio que
+utilicemos, además de cumplir ciertos requisitos como tener una
+longitud considerable o incluir caracteres de distinto tipo; pero a
+medida que acumulamos contraseñas se vuelve cada vez más difícil
+recordarlas y es frecuente que optar por repetir contraseñas.</p>
+
+<p>Para evitar esto la mejor solución es utilizar un &ldquo;baul de
+contraseñas&rdquo;.</p>
+
+<h2 id="qué-es-un-baul-de-contraseñas">¿Qué es un baul de contraseñas?</h2>
+
+<p>Es una base de datos en la que se guardan los nombres de usuario y
+contraseñas para cada servicio de manera que esten protegidas usango
+algún sistema de cifrado. Para cifrar las contraseñas se usa una
+<strong>única</strong> contraseña, que será la que tendremos que recordar y que es
+con la que se cifran el resto de contraseñas.</p>
+
+<p>Esto aporta una gran ventaja porque ahora únicamente tenemos que
+recordad una contraseña, lo que hace que ésta pueda ser más larga y
+complicada de robar.</p>
+
+<h2 id="qué-baul-puedo-usar">¿Qué baul puedo usar?</h2>
+
+<p>Una alternativa gratuita es <a href="https://www.lastpass.com/">LastPass</a>
+(incluye servicios premium pero se puede usar sin problema de manera
+gratuita). Existen más, como <a href="https://www.enpass.io/">Enpass</a> que cobra
+solo por su aplicación movil o <a href="http://keepass.info/">KeePass</a></p>
+
+<p>La ventaja que tienen las dos primeras aplicaciones es que nuestras
+contraseñas estan sincronizadas en todos nuestros dispositivos sin
+tener que preocuparnos de configurar nada. Así podremos acceder a
+ellas con extensiones de navegador o aplicaciones de escritorio desde
+cualquier plataforma, pero por lo general no son de código abierto y
+sabemos poco de como están almacenadas nuestras contraseñas mas allá
+de una forma segura.</p>
+
+<h2 id="keepass">KeePass</h2>
+
+<p>KeePass está disponible para todas las plataformas, pero deja al
+usuario la tarea de mantener una copia de la base de datos
+sincronizada con el resto de dispositivos.</p>
+
+<p>En sistemas basados en <code>arch</code> existen varias versiones, tanto una
+oficial como varias mantenidas por la comunidad. Recomendamos
+<code>KeePassXC</code> que por defecto trae un plugin para poder sincronizarlo
+con el navegador, aunque a las otras versiones disponibles se les puede
+instalar sin mayor problema. Todas se encuentran disponibles en los
+repositorios oficiales o en los de la comunidad.</p>
+
+<p>Para instalarlo desde la línea de órdenes podemos usar:</p>
+
+<pre><code>pacman -Sy keepassxc
+</code></pre>
+
+<p>Al instalarlo tendremos que crear una nueva base de datos y se nos
+preguntará por una clave. Como se ha dicho antes es conveniente que
+sea larga y facil de recordar, aunque no sea muy complicada, algo así
+como <code>estaSemanaTrabajo5HorasMenos</code> que nos aporta una seguridad
+bastante buena como se puede comprobar
+<a href="http://www.passwordmeter.com/">aquí</a></p>
+
+<p>Una vez creada nuestra base de datos podemos almacenar las
+contraseñas en ella o importarla desde otros servicios como se indica
+en <a href="http://keepass.info/help/base/importexport.html">este enlace</a>.</p>
+
+<p>Para poder rellenar los formularios de manera automática sin tener que
+copiar la contraseñá desde KeePass existen varias extensiones de navegador:</p>
+
+<ul>
+<li><p>En chrome
+uso
+<a href="https://chrome.google.com/webstore/detail/chromeipass/ompiailgknfdndiefoaoiligalphfdae">chromelPass</a></p></li>
+
+<li><p>En firefox está
+disponible
+<a href="https://addons.mozilla.org/en-US/firefox/addon/passifox/">PasslFox</a></p></li>
+</ul>
+
+<h2 id="algunas-recomendaciones">Algunas recomendaciones</h2>
+
+<p>Si es la primera vez que usa un baul de contraseñas es recomendable
+que no almacene todas las contraseñas la primera vez y deje un tiempo,
+hasta que tenga un poco de experiencia con su funcionamiento para
+poder ver que es capaz de recordar la contraseña maestra; ya que si la
+pierde no tendrá acceso a las contraseñas almacenadas.</p>
+
+<p>Es también recomendable usar lo que se conoce como <code>autentificación en
+dos pasos</code> en aquellos sitios que ofrezcan esta manera de
+acceder. Consiste en introducir un código temporal tras haber
+introducido correctamente la contraseña y al que sólo el propietario
+tiene acceso. De esta manera evitamos que si alguien se apodera de la
+contraseña tenga acceso a nuestros datos. Hay que tener en cuenta que
+el envio de este codigo por SMS no es la mejor solución, ya que se ha
+demostrado que este método es vulnerable. No obstante esto es mejor
+que nada.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

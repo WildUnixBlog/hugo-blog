@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Mi primera clase de Prolog &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Mi primera clase de Prolog</h1>
+        <div class="post-meta">
+            <time datetime="24 September 2016">
+                24 September 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>El término &ldquo;Prolog&rdquo; (o &ldquo;PROLOG&rdquo;), proviene de la expresión en francés
+&ldquo;PROgrammation en LOGique&rdquo;, es un lenguaje de programación lógico e
+interpretado, bastante conocido en el medio de investigación en
+Inteligencia Artificial.</p>
+
+<p>Prolog es un lenguaje de programación para ordenadores que se basa en
+el lenguaje de la Lógica de Primer Orden y que se utiliza para
+resolver problemas en los que entran en juego objetos y relaciones
+entre ellos. Una de las ventajas de la programación lógica es que se
+especifica qué se tiene que hacer (proagramación declarativa) y no cómo
+se debe hacer (programación imperativa).</p>
+
+<p>##Instalación</p>
+
+<p>En Ubuntu 16.04 haremos la instalación ejecutando la orden:</p>
+
+<pre><code>sudo apt-get install swi-prolog
+</code></pre>
+
+<p>o si deseamos algo más completo:</p>
+
+<pre><code>sudo apt-get install swi-prolog prolog-el
+</code></pre>
+
+<p>En nuestro Mac OS-X instalaremos SWI-Prolog a través de
+<a href="https://www.macports.org/install.php">MacPorts</a>. Para Mac OS-X la
+orden <code>port</code> de MacPorts es uno de los análogos al <code>apt-get</code> de
+Ubuntu. La orden de consola sería:</p>
+
+<pre><code>sudo port -v install swi-prolog
+</code></pre>
+
+<p>sin duda esto es lo mejor, aunque como mal menor siempre podemos
+llevar a cabo la instalación a través del paquete mpkg provisto en la
+<a href="http://www.swi-prolog.org/download/stable">página oficial de descargas de SWI-Prolog</a>,
+donde también recomiendan y dan sugerencias para llevar a cabo la
+instalación vía <a href="https://www.macports.org/">MacPorts</a>.</p>
+
+<p>Si aún disfrutamos de Windows descargaremos el instalador según
+nuestras preferencias de la
+<a href="http://www.swi-prolog.org/download/stable">página oficial de descargas de SWI-Prolog</a>.</p>
+
+<h2 id="prolog-y-emacs">Prolog y Emacs</h2>
+
+<p>Aún habiendo instalado el paquete <code>prolog-el</code> sigue siendo necesario,
+hoy por hoy, incluir en el fichero <code>.emacs</code> lo siguiente:</p>
+
+<pre><code>(autoload 'run-prolog &quot;prolog&quot; &quot;Start a Prolog sub-process.&quot; t)
+(autoload 'prolog-mode &quot;prolog&quot; &quot;Major mode for editing Prolog programs.&quot; t)
+(autoload 'mercury-mode &quot;prolog&quot; &quot;Major mode for editing Mercury programs.&quot; t)
+(setq prolog-system 'swi)
+(setq auto-mode-alist (append '((&quot;\\.pl$&quot; . prolog-mode)
+                                (&quot;\\.m$&quot; . mercury-mode))
+                               auto-mode-alist))
+</code></pre>
+
+<p>si queremos que nuestro emacs de colorines y eso &hellip; a nuestros
+ficheros <code>.pl</code>. En cambio, si trabajamos en Mac OS-X la dificultad no
+existe, pues el maravilloso
+<a href="http://aquamacs.org/download.shtml">Aquamacs</a> viene preparado
+ya. Para ver cómo instalar Emacs en Windows, pueden visitar este
+<a href="http://ubuntudriver.blogspot.com.es/2011/08/instalar-emacs-en-windows.html">post</a>.</p>
+
+<p>El hola mundo</p>
+
+<p>Ha llegado el momento de escribir el &ldquo;hola mundo&rdquo;, ese programa que
+nos da la seguridad de que hemos empezado con buen pie, que vamos por
+buen camino y que sólo es cuestión de persistir. He aquí el código:</p>
+
+<pre><code>mensaje :- nl,
+           write('Ejemplo: &quot;El hola mundo de Prolog&quot; cargado. '),
+           nl,
+           nl.
+salude  :- write('¡hola ... mundo!').
+        :- mensaje.
+</code></pre>
+
+<p>Tomaremos el texto anterior, editaremos un fichero que podría llamarse
+<code>hola.pl</code>, por ejemplo, y abriremos una terminal (<code>Ctrl+t</code>) en la que
+viajaremos hasta el lugar donde se halle el <code>hola.pl</code> (si no tendremos
+que cargar el fichero dando el camino, que también se
+puede). Seguidamente ejecutamos en la línea de la terminal la orden:</p>
+
+<pre><code>swipl
+</code></pre>
+
+<p>y seguidamente, tras el diálogo de bienvenida ejecutamos</p>
+
+<pre><code>?- ['hola.pl'].
+</code></pre>
+
+<p>con lo que tendremos el siguiente diálogo:</p>
+
+<pre><code>Ejemplo: &quot;El hola mundo de Prolog&quot; cargado. 
+
+% hola.pl compiled 0.00 sec, 1,632 bytes
+true.
+</code></pre>
+
+<p>Ahora podemos pedir la validación del predicado salude:</p>
+
+<pre><code>?- salude.
+¡hola ... mundo!
+true.
+
+?-
+</code></pre>
+
+<p>Hay que observar que cuando se pide una validación, dicha petición
+acaba en &ldquo;.&rdquo; y luego es cuando se pulsa <code>intro</code>. Puede llamar la
+atención en nuestro particular código del <code>hola.pl</code> la línea <code>:-
+mensaje.</code>. A grandes rasgos, su cometido es solicitar en tiempo de
+interpretación la validación automática del predicado <code>mensaje</code> que
+había sido argumentado aguas arriba de código. No le demos más
+importancia por ahora, pero guardemos en la memoria el alcance de esta
+técnica. Observar también que los ficheros que vamos a interpretar con
+SWI-Prolog deben tener la extensión <code>.pl</code>.</p>
+
+<p>##Un programa arquetípico</p>
+
+<p>Habitualmente hemos recurrido en &ldquo;Mi primera clase &hellip;&rdquo; a mostrar
+ejecuciones aritméticas. Ahora dejamos esa vía para resaltar las muy
+especiales características de este otro lenguaje. Nuestra propuesta
+arquetípica es ahora un código, contenido en el fichero <code>razona.pl</code> que
+muestra cómo Prolog &ldquo;razona&rdquo;, pues Prolog incluye un &ldquo;demostrador&rdquo;:</p>
+
+<pre><code>p(a).                              
+p(X) :- q(X), r(X).                
+p(X) :- u(X).                      
+
+q(X) :- s(X).                      
+
+r(a).                              
+r(b).                              
+
+s(a).                              
+s(b).                              
+s(c).                              
+
+u(d).
+</code></pre>
+
+<p>Realmente los programas en Prolog son todos como éste, con mayor o
+menor sofistificación. La estructura del esquema ordena &mdash;y aquí el
+orden importa&mdash; una serie de reglas del tipo:</p>
+
+<pre><code>cabeza_de_la_regla :- cuerpo_de_la_regla.
+</code></pre>
+
+<p>en las que puede faltar la <code>cabeza_de_la_regla</code> o el
+<code>cuerpo_de_la_regla</code>, como hemos visto. El conjunto de las reglas dadas
+constituye una base de datos que Prolog recorre de arriba hacia
+abajo. En nuestro caso, la línea <code>p(a)</code> sirve para informar al intérprete
+de que debe considerar que el predicado <code>p(X)</code> vale si <code>X=a</code>. La línea
+<code>p(X) :- q(X), r(X).</code> sirve para informar al intérprete de que debe dar
+por válido a <code>p(X)</code> para aquellos valores atribuibles a <code>X</code> con los cuales
+resultase válido simultáneamente <code>q(X)</code> y <code>r(X)</code>. Pero veamos a nuestro
+programa en acción con el siguiente diálogo:</p>
+
+<pre><code>?- ['razona.pl'].
+% razona.pl compiled 0.00 sec, 2,776 bytes
+true.
+
+?- p(X).
+X = a.
+
+?- p(X).
+X = a.
+
+?- p(X).
+X = a;
+X = a;
+X = b;
+X = d.
+</code></pre>
+
+<p>Observe que en la primera línea sólo ha habido una respuesta porque
+hemos pulsado <code>.</code> tras el primer <code>X = a</code>; ello indica al intérprete
+que debe parar de buscar valores para <code>X</code> que satisfagan a <code>p</code>. Si
+pulsamos en lugar de <code>.</code> el signo <code>;</code>, el intérprete busca otras
+alternativas como valores de <code>X</code> que satisfagan a <code>p</code>. En nuestro caso
+vuelve a encontrar que vale <code>a</code> por otra razón, encuentra como
+candidatos a <code>b</code> y también a <code>d</code>. Entonces detiene la búsqueda al
+constatar que no hay más candidatos. Nuestro lector puede tratar de
+razonar el porqué de este comportamiento; será en segundo gran hito
+que alcance &hellip; y puede que el último pues encontrará entonces que
+realmente lo que hace el intérprete es explorar un árbol unificando y
+resolviendo.</p>
+
+<h2 id="algunas-precisiones">Algunas precisiones</h2>
+
+<p>Si queremos que el intérprete muestre su ayuda haremos:</p>
+
+<pre><code>?- help(help).
+</code></pre>
+
+<p>y si queremos salir del intérprete haremos:</p>
+
+<pre><code>?- halt.
+</code></pre>
+
+<p>Para cargar más de un programa en la interfax del intérprete podemos hacer lo siguiente</p>
+
+<pre><code>?- ['hola.pl','razona.pl'].
+</code></pre>
+
+<p>y habremos cargado <code>hola.pl</code> y <code>razona.pl</code>. Habrá que tener cuidado de
+que no haya conflictos en los contenidos de ambos ficheros. Podemos
+ver lo que hemos cargado hasta el momento con:</p>
+
+<pre><code>?- listing.
+</code></pre>
+
+<h2 id="un-reto">Un reto</h2>
+
+<p>Les dejamos el siguiente código que puede formar parte del fichero &ldquo;sumatorio.pl&rdquo;:</p>
+
+<pre><code>sumatorio(1,1) :- !.
+sumatorio(N,S) :- N1 is N-1,
+                  sumatorio(N1,S1),
+                  S is N+S1.
+</code></pre>
+
+<p>Les invitamos a que  establezcan el siguiente diálogo:</p>
+
+<pre><code>?- ['sumatorio.pl'].
+% sumatorio.pl compiled 0.00 sec, 1,200 bytes
+true.
+
+?- sumatorio(10,X).
+X = 55.
+</code></pre>
+
+<p>y que según lo observado traten de entender el programa. Podrían
+editar seguidamente el fichero <code>sumatorio_dp.pl</code> con el mismo
+contenido del anterior pero quitando el carácter <code>!</code> del código:</p>
+
+<pre><code>sumatorio(1,1).
+sumatorio(N,S) :- N1 is N-1,
+                  sumatorio(N1,S1),
+                  S is N+S1.
+</code></pre>
+
+<p>Ahora pueden repetir lo hecho con <code>sumatorio.pl</code>. ¿Qué disfunción
+observan? ¿A qué se debe?</p>
+
+<h2 id="para-aprender-más">Para Aprender Más</h2>
+
+<p>Le sugerimos el estudio de los siguientes libros:</p>
+
+<ol>
+<li><p><a href="https://is.gd/SgDmms">Delahaye, J.P.; Formal Methods in Artificial Intelligence. John Wiley &amp; Sons</a></p></li>
+
+<li><p><a href="https://eqageta.files.wordpress.com/2014/01/7khjil.pdf">Dodd, T. PROLOG: A Logical Approach. Oxford University Press</a></p></li>
+
+<li><p><a href="https://mitpress.mit.edu/books/art-prolog">Sterling, L.S; Shapiro, E. Y. The Art of Prolog. MIT Press</a></p></li>
+
+<li><p><a href="https://is.gd/s6sQPb">William F. Clocksin, W.F.; Christopher S. Mellish, C.S. Programming in Prolog: Using the ISO Standard. Springer-Verlag</a></p></li>
+</ol>
+
+<p>y de los siguientes manuales o apuntes:</p>
+
+<ol>
+<li><p><a href="https://www.cpp.edu/~jrfisher/www/prolog_tutorial/contents.html">prolog :- tutorial de J.R.Fisher</a></p></li>
+
+<li><p><a href="http://www.infor.uva.es/~teodoro/PrologAlicante.pdf">Llorens Largo, F., Castel de Haro, M. J.; Prácticas de Lógica. Prolog. Departamento de Ciencias de la Computación e Inteligencia Artificial. U. de Alicante</a></p></li>
+</ol>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

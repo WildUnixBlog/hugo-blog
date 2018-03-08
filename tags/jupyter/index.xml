@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jupyter on </title>
+    <link>https://wildunix.es/tags/jupyter/</link>
+    <description>Recent content in Jupyter on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/jupyter/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Instalar SageMath en Mac OS , Windows, Ubuntu y otros Linux</title>
+      <link>https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/</link>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/</guid>
+      <description>Introducción Últimamente está siendo muy utilizado el sistema algebraico computacional que conocemos con el nombre de Sage. El nombre Sage, como ocurre en tantas ocasiones, es un acrónimo, esta vez de &amp;ldquo;System for Algebra and Geometry Experimentation&amp;rdquo;. En Inglés se usa frecuentemente &amp;ldquo;sagemath&amp;rdquo; en lugar de &amp;ldquo;Sage&amp;rdquo; para distiguir de otros usos de la palabra en dicha lengua.
+Si quisiera trabajar con Sage en la nube sin tenerlo instalado en su máquina, es posible hacerlo.</description>
+    </item>
+    
+  </channel>
+</rss>

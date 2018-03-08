@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Enigma on </title>
+    <link>https://wildunix.es/tags/enigma/</link>
+    <description>Recent content in Enigma on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Fri, 11 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/enigma/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>El Modelo M4 de la Máquina Enigma</title>
+      <link>https://wildunix.es/posts/el-modelo-m4-de-la-maquina-enigma/</link>
+      <pubDate>Fri, 11 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/el-modelo-m4-de-la-maquina-enigma/</guid>
+      <description>Resumen de la Evolución de la Máquina Enigma Desde principios del siglo 20, con el auge de la comunicación inalámbrica, resultó obvia la necesidad de ocultar la información en el momento de la transmisión. Por aquel tiempo los métodos criptográficos &amp;ldquo;a mano&amp;rdquo; habían revelado su inutilidad y los ingenieros estaban a la busca de máquinas de cifrado. El recurso inmediato en la era analógica era el rotor. En 1917 Edward Hugh Hebern desarrolló una máquina de cifrado de discos en rotación, cada uno de los cuales llevaba a cabo una sustitución.</description>
+    </item>
+    
+    <item>
+      <title>Instalar TeX Live en Ubuntu, Mac OS y Windows</title>
+      <link>https://wildunix.es/posts/instalar-tex-live-en-ubuntu-mac-os-y-windows/</link>
+      <pubDate>Fri, 11 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-tex-live-en-ubuntu-mac-os-y-windows/</guid>
+      <description>Introducción Es incontrovertible la gran potencia de edición que ofrece LaTeX, desarrolle usted su actividad en las letras o en las ciencias; los primeros tiene la potencia sin la dificultad, con lo que todo son ganacias.
+Para concer más detalles sobre el sistema y sus autores, Donald E. Knuth y Leslie Lamport, visite la entrada de LaTeX en la Wikipedia.
+Como es bien sabido, el software que se instala en Ubuntu/Debian con apt-get es a menudo antiguo.</description>
+    </item>
+    
+  </channel>
+</rss>

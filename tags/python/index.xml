@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on </title>
+    <link>https://wildunix.es/tags/python/</link>
+    <description>Recent content in Python on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Instalar SageMath en Mac OS , Windows, Ubuntu y otros Linux</title>
+      <link>https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/</link>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-sage-en-mac-os-x-ubuntu-y-otros-linux-uso-bajo-windows/</guid>
+      <description>Introducción Últimamente está siendo muy utilizado el sistema algebraico computacional que conocemos con el nombre de Sage. El nombre Sage, como ocurre en tantas ocasiones, es un acrónimo, esta vez de &amp;ldquo;System for Algebra and Geometry Experimentation&amp;rdquo;. En Inglés se usa frecuentemente &amp;ldquo;sagemath&amp;rdquo; en lugar de &amp;ldquo;Sage&amp;rdquo; para distiguir de otros usos de la palabra en dicha lengua.
+Si quisiera trabajar con Sage en la nube sin tenerlo instalado en su máquina, es posible hacerlo.</description>
+    </item>
+    
+    <item>
+      <title>Mi Primera Clase de Python</title>
+      <link>https://wildunix.es/posts/mi-primera-clase-de-python/</link>
+      <pubDate>Tue, 18 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/mi-primera-clase-de-python/</guid>
+      <description>Introducción Python fue creado a finales de los ochenta por Guido van Rossum en el Centro para las Matemáticas y la Informática (CWI, Centrum Wiskunde &amp;amp; Informatica), en los Países Bajos, como un sucesor del lenguaje de programación ABC, capaz de manejar excepciones e interactuar con el sistema operativo Amoeba. Recibe influencias de ABC, ALGOL 68, C, Haskell, Icon, Lisp, Modula-3, Perl, Smalltalk y Java.
+Python es un lenguaje de programación interpretado cuya filosofía hace hincapié en una sintaxis muy limpia y que favorezca un código legible.</description>
+    </item>
+    
+    <item>
+      <title>Configurar Django con Nginx, Gunicorn, virtualenv, supervisor y PostgreSQL</title>
+      <link>https://wildunix.es/posts/configurar-django-con-nginx-gunicorn-virtualenv-supervisor-y-postgresql/</link>
+      <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/configurar-django-con-nginx-gunicorn-virtualenv-supervisor-y-postgresql/</guid>
+      <description>Esta es una traducción del post que puede encontrar en el enlace:
+http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/
+contando con el permiso autor para compartirlo en español.
+Introducción Django es un framework de desarrollo web eficiente, versátil y dinámico que está en continua evolución. Cuando Django empezó a ganar popularidad la configuración que se recomendaba era con Apache y mod_wsgi. El &amp;ldquo;arte&amp;rdquo; de hacer funcionar a Django ha cambiado y la configuración recomendada se ha hecho más eficiente y elástica a la par que más compleja e incluye herramientas como: Nginx, Gunicorn, virtualenv, supervisord y/o PostgreSQL.</description>
+    </item>
+    
+    <item>
+      <title>Instalar IPython mediante pip en Ubuntu y Mac OS X</title>
+      <link>https://wildunix.es/posts/instalar-ipython-mediante-pip-en-ubuntu-y-mac-os-x/</link>
+      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/instalar-ipython-mediante-pip-en-ubuntu-y-mac-os-x/</guid>
+      <description>Introducción Una vez que hemos decido no hacer frente a los gastos del uso legal de Mathematica y hemos desechado la ideas usar Maxima por las razones ya bien conocidas, una buena apuesta es llamar a la puerta de Python y servirse de las herramientas que se han derivado de él en la última década; nos referimos a sagemath e IPython.
+A la instalación de sagemath le hemos dedicado un post en Wildunix.</description>
+    </item>
+    
+    <item>
+      <title>Proyecto básico con Django (crear un blog)</title>
+      <link>https://wildunix.es/posts/proyecto-basico-con-django/</link>
+      <pubDate>Mon, 21 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/proyecto-basico-con-django/</guid>
+      <description>Introducción Django es un framework web para Python. Existen otros como flash pyramid pero Django es uno de los más completos y que se preocupa de que únicamente nos tengamos que concentrar en lo básico.
+Con este post quiero cubrir un proyecto básico ya que creo que puede servir a las personas que estan iniciándose. Pretendo que sirva como guía y recomiendo la documentación de Django ya que es una de las más completas y en ella podemos encontrar facilmente cualquier cosa.</description>
+    </item>
+    
+    <item>
+      <title>Guía rápida para usar virtualenv</title>
+      <link>https://wildunix.es/posts/guia-rapida-para-usar-virtualenv/</link>
+      <pubDate>Sun, 20 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/guia-rapida-para-usar-virtualenv/</guid>
+      <description>¿Qué es Virtualenv? Como dice en su propia documentacion documentación es una herramienta para crear entornos aislados para python ¿Y qué tiene esto de bueno? Pues que un un mismo odenador podemos tener distintas versiones de librerias o incluso ¡distintas versiones del propio python! Esto es realmente útil cuando queremos hacer por ejemplo pruebas de un código en distintas versiones o replicar una instalación de otro ordenador. Además nos permite evitar instalar librerías a nivel global por lo que evitamos posibles problemas o incluso podemos comparar entre versiones.</description>
+    </item>
+    
+  </channel>
+</rss>

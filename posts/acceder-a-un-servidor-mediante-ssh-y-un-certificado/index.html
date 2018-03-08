@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Acceder a un servidor mediante ssh y un certificado &middot; </title>
+    
+    <meta name="description" content="Blog cooperativo de Yábir Benchakhtir y M. García dedicado a ayudar a usuarios de Unix y programadores de Python y Haskell">
+    <meta name="generator" content="Hugo 0.35" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://wildunix.es/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://wildunix.es/css/screen.css">
+    <link rel="stylesheet" href="https://wildunix.es/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://wildunix.es/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover, a.excerptlink:hover {color: #2079b4;}
+    a.excerptlink:visited {color:inherit;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://wildunix.es">WildUnix</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">Acceder a un servidor mediante ssh y un certificado</h1>
+        <div class="post-meta">
+            <time datetime="20 March 2016">
+                20 March 2016
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h2 id="introducción">Introducción</h2>
+
+<p>Cuando no es abierta una cuenta en un servidor, el administrador tiene
+un problema, cual es hacernos llegar la contraseña. Si la envía en
+abierto, estará comprometida; si la envía cifrada, ¿hasta cuándo puede
+extenderse la labor de compartir contraseñas?</p>
+
+<p>La solución a esta dificultad se basa en facilitar el acceso del
+usuario mediante el uso de certificados. El administrador: abrirá la
+cuenta, habilitará el servidor para poder acceder a las cuentas
+mediante certificados, notificará al usuario que su cuenta está
+abierta y quedará a la espera del certificado público de acceso.</p>
+
+<p>Por su parte, el usuario procederá a generar una pareja de
+certificados: el público y el privado, le hará llegar al administrador
+el público en abierto y éste procederá a habilitar el acceso mediante
+él y el privado, que sólo conocerá el usuario y tendrá guardado
+celosamente incluso bajo un password dado en el momento de la
+generación.</p>
+
+<p>De esta manera incluso podremos tener una cuenta compartida por varios
+usuarios, siempre que éstos consientan, de lo que será garante el
+administrador.</p>
+
+<h2 id="instalación-de-ssh">Instalación de ssh</h2>
+
+<p>Para usar <code>ssh</code> en un equipo remoto, al que llamaremos en adelante
+&ldquo;servidor&rdquo;, ésta utilidad debe estar instalada por su
+administrador. En un equipo bajo Ubuntu se haría mediante:</p>
+
+<pre><code>sudo apt-get install openssh-server
+</code></pre>
+
+<p>o forma similar como superusuario (en cuyo caso no escribiremos
+<code>sudo</code>) en equipos bajo Debian. A partir de este momento tendremos
+unas vastas posibilidades de acceso al servidor y de control sobre él.</p>
+
+<h2 id="acceso-al-servidor-mediante-certificado">Acceso al servidor mediante certificado</h2>
+
+<p>En esta sección explicaremos:</p>
+
+<ol>
+<li><a href="#Habilitación-del-servidor">la habilitación del servidor para el acceso mediante certificado</a></li>
+<li><a href="#Generación-de-la-Pareja-de-Certificados">la generación de la pareja de certificados: el público y el privado</a></li>
+<li><a href="#Habilitación-del-acceso-mediante-certificado">la habilitación del acceso a la cuenta mediante el certificado privado</a></li>
+</ol>
+
+<h3 id="habilitación-del-servidor">Habilitación del servidor</h3>
+
+<p>¿Qué ocurre si ignoramos las instrucciones de esta sección titulada
+&ldquo;Habilitación del servidor&rdquo; y no hacemos ninguno de los cambios que se
+dirán? El inicio de sesión vía <code>ssh</code> sólo funcionará para los usuarios
+que tengan un campo de contraseña relleno en <code>/etc/shadow</code> o un
+<code>authorized_key</code> para <code>ssh</code>. Se observará que el valor por defecto
+para <code>PubkeyAuthentication</code> es <code>yes</code> y para <code>PermitEmptyPasswords</code> es
+<code>no</code>, por lo que si incluso ambos son eliminados el comportamiento
+será el mismo. Los usuarios que tengan un <code>authorized_key</code> para <code>ssh</code>
+podrán entrar mediante la pareja de certificados sólo desde los
+equipos con certificado privado cuyo correspondiente público haya sido
+incluido de forma oportuna en el <code>authorized_key</code> del servidor; desde
+el resto de equipos podrían entrar con la contraseña bajo la que esté
+la cuenta del servidor, si existiera. Quien no tuviese un
+<code>authorized_key</code> y sí contraseña, podría seguir usándola en la forma
+habitual.</p>
+
+<p>Los cambios que se describen a continuación deben ser efectuados
+cuando se quiera impedir el acceso por contraseña, quedando como única
+opción permitida el acceso por una pareja de claves pública y
+privada. En tal caso no será necesaria la verificación de caducidad de
+la contraseña <code>PAM</code> (Pluggable Authentication Modules), por lo que se
+habría de deshabilitar este servicio como después se dirá.</p>
+
+<p>La labor, de ser llevada a cabo, debe ser hecha por el administrador
+del servidor. Suponiendo instalado <code>ssh</code>, existirá el fichero
+<code>sshd_config</code> en el directorio <code>/etc/ssh/</code>, el cual debe contar con
+los siguientes campos a los valores que se indica (si alguno no
+existiese, habría de ser creado):</p>
+
+<pre><code>RSAAuthentication yes
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no
+</code></pre>
+
+<p>Es muy importante observar la buena costumbre de hacer una copia de
+respaldo del fichero de configuración que vayamos a modificar antes de
+hacer esa modificación.</p>
+
+<pre><code>sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.20151214
+</code></pre>
+
+<p>En el caso de editarlo y cometer algún error, quizás lo dejemos
+corrupto y podríamos tener un problema muy serio.</p>
+
+<p>Hecho ese importante inciso, en el caso de nuestro equipo, un servidor
+bajo <code>Ubuntu 14.04</code>, editamos el mencionado fichero con nuestro editor
+preferido al efecto, <code>nano</code>, según la siguiente orden:</p>
+
+<pre><code>sudo nano /etc/ssh/sshd_config
+</code></pre>
+
+<p>y cambiamos la línea:</p>
+
+<pre><code>#PasswordAuthentication yes
+</code></pre>
+
+<p>por la línea:</p>
+
+<pre><code>PasswordAuthentication no
+</code></pre>
+
+<p>lo cual supone descomentar tal línea y conmutar el <code>yes</code> al
+<code>no</code>. Finalmente debimos cambiar la línea:</p>
+
+<pre><code>UsePAM yes
+</code></pre>
+
+<p>por la línea</p>
+
+<pre><code>UsePAM no
+</code></pre>
+
+<p>lo que supuso conmutar el <code>yes</code> al <code>no</code>.</p>
+
+<p>Una vez hechos los cambios, los dejamos registrados y salimos (<code>^X</code>,
+<code>y</code> y seguidamente <code>Intro</code>). Hecho esto es preciso relanzar el
+servicio para que surta efecto. Ello será llevado a cabo con la orden:</p>
+
+<pre><code>sudo service ssh reload
+</code></pre>
+
+<p>y habremos acabado en lo que a esta gestión respecta.</p>
+
+<h3 id="generación-de-la-pareja-de-certificados">Generación de la Pareja de Certificados</h3>
+
+<p>La generación de los certificados, suponiendo estar en un sistema
+<code>Unix</code> como los basados en <code>Debian</code> o el caso de <code>Mac OS X</code>, se lleva
+a cabo con una utilidad llamada <code>ssh-keygen</code> que encontraremos a
+disposición por el simple hecho de tener instalado <code>ssh</code>. Obviamente
+es una operación llevada a cabo por una CA o del lado del usuario en
+el equipo desde el que desea acceder al servidor. En el caso de ser
+del lado del usuario, en su equipo deberá estar creado el directorio
+<code>/home/login_equip/.ssh</code> y si no estuviese creado, habríamos de
+crearlo.</p>
+
+<p>Ejecutaremos la siguiente orden:</p>
+
+<pre><code>ssh-keygen -t rsa -b 4096 -C &quot;su_email@dominio.ext&quot;
+</code></pre>
+
+<p>donde la dirección electrónica se utiliza como una mera etiqueta y
+podría ser eventualmente la que tuviése para comunicarse con el
+administrador del servidor en el propio servidor. El diálogo será como
+sigue:</p>
+
+<pre><code>Generating public/private rsa key pair.
+Enter file in which to save the key (/home/login_equip/.ssh/id_rsa):
+</code></pre>
+
+<p>Es muy recomendado por los especialistas pulsar ahora <code>Intro</code> y no
+cambiar los ajustes por defecto. No obstante, si queremos distinguir
+los certificados por servidores, le cambiaríamos el nombre a uno
+sugerente poco explícito y, de ser explícito, en modo alguno
+evadiríamos poner una clave de uso al certificado que estamos
+generando (es recomendado poner la clave en cualquier caso):</p>
+
+<pre><code>Enter passphrase (empty for no passphrase): 
+Enter same passphrase again:
+</code></pre>
+
+<p>por supuesto que los renglones anteriores se presentan: uno, se
+establece la contraseña (en <code>Unix</code> se escribe sin ver efecto), aparece
+la segunda la línea y se repite la contraseña que debe
+coincidir. Finalmente el sistema genera una huella dactilar (en inglés:
+<em>fingerprint</em>):</p>
+
+<pre><code>The key fingerprint is:
+SHA256:m+xH/L0ZLRqTFvHhpKMGoDdpNt2Apd89XXeYaUTdI1Y su_email@dominio.ext
+The key's randomart image is:
++---[RSA 4096]----+
+|        .    .+E.|
+|       +     + =o|
+|      + .   o O =|
+|     . = + . O oo|
+|    . B S.o * +  |
+|     + + +o. = . |
+|        +.o.=.o .|
+|       . ....+.+ |
+|        ..  . o. |
++----[SHA256]-----+
+</code></pre>
+
+<p>Al acabar la operación se han generado dos ficheros en <code>home/login_equip/.ssh</code>:</p>
+
+<pre><code>id_rsa
+id_rsa.pub
+</code></pre>
+
+<p>El primero <code>id_rsa</code> es la clave privada, a la que no debe tener acceso
+nadie salvo el usuario y que estará bajo custodia y a resguardo por la
+contraseña. El fichero segundo <code>id_rsa.pub</code> será el que enviaremos al
+administrador del servidor en abierto, aunque
+discretamente. Eventualmente, si conservásemos aún acceso al servidor
+mediante contraseña y éste nos fuera conocido, lo copiaríamos en
+nuestra carpeta <code>.ssh</code> del servidor (la suponemos creada) mediante
+&mdash;previa adaptación conveniente&mdash; la orden:</p>
+
+<pre><code>scp /home/login_equip/.ssh/id_rsa.pub login_server@nombre_servidor.dominio.ext:/home/login_server/.ssh
+</code></pre>
+
+<p>Insistimos en que esto presupone el conocimiento de la contraseña de
+acceso a la cuenta en servidor y tenerlo, lo que queda fuera de
+nuestro protocolo de seguridad.</p>
+
+<p>Usualmente se elimina del equipo el certificado público una vez ha
+sido utilizado y surtido efecto.</p>
+
+<h3 id="habilitación-del-acceso-mediante-certificado">Habilitación del acceso mediante certificado</h3>
+
+<p>En cualquier caso, nosotros o cuando el administrador reciba el
+certificado público de nombre <code>id_rsa.pub</code> debemos o debe incluir su
+contenido en el fichero <code>authorized_keys</code>. No cabe duda de que esta
+operación debe ser hecha en el servidor. La orden puede ser la
+siguiente:</p>
+
+<pre><code>cat /home/login_server/.ssh/id_rsa.pub &gt;&gt; /home/login_server/.ssh/authorized_keys
+</code></pre>
+
+<p>Si queremos permitir el acceso mediante certificado para la misma
+cuenta a varios usuarios, ejecutaríamos esta orden para el fichero
+<code>id_rsa.pub</code> provisto por cada uno de ellos y sobre el
+<code>authorized_keys</code> de la cuenta.</p>
+
+<p>El último paso es probar el acceso desde el equipo; para ello la
+siguiente orden:</p>
+
+<pre><code>ssh -i /home/login_equip/.ssh/id_rsa login_server@nombre_servidor.dominio.ext -o VisualHostKey=yes
+</code></pre>
+
+<p>y entonces el mensaje sería</p>
+
+<pre><code>Host key fingerprint is SHA256:HVRPMg9A/9TXDQQsxbtWBPBcLxNvLUeq8xq7ugjXVYA
++---[ECDSA 256]---+
+|         .=OX+* .|
+|         .E+oX.O+|
+|          ..+oX @|
+|         . ..=.*.|
+|        S . +o.  |
+|         . .oo   |
+|      . . ... .  |
+|       o .   +   |
+|        . oo+.   |
++----[SHA256]-----+
+
+Last login: Sun Nov 29 17:13:47 2015 from 4.127.78.188.dynamic.ctelefono.com
+login_server@login_server 
+</code></pre>
+
+<h3 id="compartir-una-cuenta">Compartir una Cuenta</h3>
+
+<p>Si una misma cuenta hubiera de ser compartida por varios usuarios, el
+administrador puede recibir el certificado público <code>id_rsa.pub</code>
+aportado por cada uno de los usuario y reproducir el proceso de la
+primera vez:</p>
+
+<pre><code>cat /home/login_server/.ssh/id_rsa.pub &gt;&gt; /home/login_server/.ssh/authorized_keys
+</code></pre>
+
+<p>La particularidad ahora es que esta labor podría hacerla desde la cuenta el primer
+usuario dado de alta.</p>
+
+<h2 id="para-escribir-este-post-han-sido-útiles-los-siguientes-enlaces">Para escribir este post han sido útiles los siguientes enlaces:</h2>
+
+<p><a href="https://www.swapbytes.com/?s=ssh+mediante+clave">Strappazzon, Nicola. Acceso por SSH mediante clave Pública y Privada en Ubuntu.</a></p>
+
+<p><a href="https://help.github.com/articles/generating-ssh-keys/"><strong>GitHub</strong>Help. Generating SSH keys.</a></p>
+
+<p><a href="http://librosweb.es/libro/pro_git/capitulo_4/preparando_el_servidor.html">LibrosWeb. 4.4. Preparando el servidor.</a></p>
+
+<p>[<a href="http://superuser.com/questions/22535/what-is-randomart-produced-by-ssh-keygen">*}super<strong>user</strong>. What is randomart produced by ssh-keygen?</a></p>
+
+<p><a href="https://geekytheory.com/copiar-archivos-a-traves-de-ssh-con-scp/">Geeky<strong>Theory</strong> Linux. COPIAR ARCHIVOS A TRAVÉS DE SSH CON SCP</a></p>
+
+<p><a href="http://unix.stackexchange.com/questions/36804/which-users-are-allowed-to-log-in-via-ssh-by-default">Which users are allowed to log in via SSH by default?</a></p>
+
+<p><a href="http://unix.stackexchange.com/questions/160268/expired-password-and-ssh-key-based-login-with-usepam-yes">Expired password and SSH key based login with UsePAM yes</a></p>
+
+<p>Y &hellip; esto es todo por hoy.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/wildunix" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      
+      
+      
+      
+      <a href="//github.com/wildUnixBlog" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="https://wildunix.es"></a>. Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://wildunix.es/js/index.js"></script>
+<script src="https://wildunix.es/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

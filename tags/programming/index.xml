@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programming on </title>
+    <link>https://wildunix.es/tags/programming/</link>
+    <description>Recent content in Programming on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sun, 27 Nov 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://wildunix.es/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>El patron (n&#43;k) en Haskell a partir de la versión 7.0.3</title>
+      <link>https://wildunix.es/posts/el-patron-nk-en-haskell-a-partir-de-la-version-703/</link>
+      <pubDate>Sun, 27 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/el-patron-nk-en-haskell-a-partir-de-la-version-703/</guid>
+      <description>Introducción Con las versiones de Haskell provistas en los Ubuntu anteriores a Ubuntu 11.10, los programadores de Haskell han venido usando un truco permitido, aunque no muy ortodoxo, que era incluir el patrón (n+k) en las definiciones de funciones, a la izquierda del igual definitorio. Por ejemplo, la implementación del factorial era entendida por muchos así:
+factorial :: Integer -&amp;gt; Integer factorial 0 = 1 factorial (n+1) = (n+1) * factorial n  en lugar de:</description>
+    </item>
+    
+    <item>
+      <title>Mi Primera Clase de Python</title>
+      <link>https://wildunix.es/posts/mi-primera-clase-de-python/</link>
+      <pubDate>Tue, 18 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/mi-primera-clase-de-python/</guid>
+      <description>Introducción Python fue creado a finales de los ochenta por Guido van Rossum en el Centro para las Matemáticas y la Informática (CWI, Centrum Wiskunde &amp;amp; Informatica), en los Países Bajos, como un sucesor del lenguaje de programación ABC, capaz de manejar excepciones e interactuar con el sistema operativo Amoeba. Recibe influencias de ABC, ALGOL 68, C, Haskell, Icon, Lisp, Modula-3, Perl, Smalltalk y Java.
+Python es un lenguaje de programación interpretado cuya filosofía hace hincapié en una sintaxis muy limpia y que favorezca un código legible.</description>
+    </item>
+    
+    <item>
+      <title>Mi Primera Clase de Haskell</title>
+      <link>https://wildunix.es/posts/mi-primera-clase-de-haskell/</link>
+      <pubDate>Sat, 24 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/mi-primera-clase-de-haskell/</guid>
+      <description>Introducción Hay un paradigma de programación que se denomina &amp;ldquo;programación declarativa&amp;rdquo;. Surge en contraposición a la &amp;ldquo;programación imperativa&amp;rdquo;, que en sus comienzos estaba representada por lenguajes muy próximos a las peculiaridades de la propia máquina: operaciones artiméticas simples, instrucciones de acceso a la memoria, etc. Ese tipo de programas resultan a menudo crípticos, llegando a impedir su comprensión incluso a programadores entrenados, aunque en la actualidad los lenguajes imperativos han atenuado mucho este efecto.</description>
+    </item>
+    
+    <item>
+      <title>Mi primera clase de Prolog</title>
+      <link>https://wildunix.es/posts/mi-primera-clase-de-prolog/</link>
+      <pubDate>Sat, 24 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://wildunix.es/posts/mi-primera-clase-de-prolog/</guid>
+      <description>Introducción El término &amp;ldquo;Prolog&amp;rdquo; (o &amp;ldquo;PROLOG&amp;rdquo;), proviene de la expresión en francés &amp;ldquo;PROgrammation en LOGique&amp;rdquo;, es un lenguaje de programación lógico e interpretado, bastante conocido en el medio de investigación en Inteligencia Artificial.
+Prolog es un lenguaje de programación para ordenadores que se basa en el lenguaje de la Lógica de Primer Orden y que se utiliza para resolver problemas en los que entran en juego objetos y relaciones entre ellos.</description>
+    </item>
+    
+  </channel>
+</rss>
