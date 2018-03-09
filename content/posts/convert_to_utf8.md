@@ -36,11 +36,11 @@ otros. Para fijar ideas, haremos los ejemplos con el fichero `fichero.wxm`
 
 que una vez descargado lo colocamos en:
 
-/home/mi_usuario/Documentos
+	/home/mi_usuario/Documentos
 
 y si estamos usando Mac OS X, lo situaremos en:
 
-/Users/mi_usuario/Documentos
+	/Users/mi_usuario/Documentos
 
 
 ## Cómo Saber la Codificación de un Fichero
@@ -115,5 +115,3 @@ nuevo la orden `file`, obteniendo el siguiente diálogo:
 	fichero_utf8.wxm: text/x-c; charset=utf-8
 
 y ... esto es todo por hoy. 
-
-
