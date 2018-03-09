@@ -55,7 +55,7 @@ la anterior orden; pues bien, nos interesa por ahora el que se llama
 `miQRC-pics.pdf`. Éste será el fichero a incrustar en cualquier
 fichero LaTeX.
 
-##Inclusión del código QR en un fichero LaTeX
+## Inclusión del código QR en un fichero LaTeX
 
 Supongamos que el fichero `miQRC-pics.pdf` está alojado en el directorio
 
