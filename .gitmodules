@@ -1,9 +1,3 @@
 [submodule "public"]
 	path = public
 	url = git@github.com:WildUnixBlog/WildUnixBlog.github.io.git
-[submodule "themes/steam"]
-	path = themes/steam
-	url = git@github.com:WildUnixBlog/hugo-steam-theme.git
-[submodule "themes/hugo-steam-theme"]
-	path = themes/hugo-steam-theme
-	url = git@github.com:WildUnixBlog/hugo-steam-theme.git
