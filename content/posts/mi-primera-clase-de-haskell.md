@@ -129,7 +129,7 @@ algunas funciones a una implementación casi trivial, y sin embargo ser
 su correspondiente versión en lenguajes imperativos extremadamente
 tediosas de programar.
 
-##Instalación
+## Instalación
 
 Al instalar Haskell en nuestro ordenador, conviene instalar la
 plataforma completa. En Ubuntu, cuando ésta está disponible, la
@@ -180,7 +180,7 @@ estaba rota por culpa de "fantasmas no visibles" en el
 renglón. Recomendación: Sublime Text o Emacs ... o en el otro orden
 mejor.
 
-###Haskell y Emacs
+### Haskell y Emacs
 
 Los archivos de los proyectos de Haskell son ficheros .hs. Para que
 Emacs pueda manejar fácilmente dichos ficheros, instalaremos en
@@ -188,7 +188,7 @@ nuestro Ubuntu el paquete haskell-mode
 
 	sudo apt-get install haskell-mode
 
-###Haskell y Sublime Text
+### Haskell y Sublime Text
 
 Instalaremos Sublime Text mediante:
 
@@ -207,7 +207,7 @@ y agregar dentro de las llaves
 
 	"translate_tabs_to_spaces": true, 
 
-##El "hola mundo"
+## El "hola mundo"
 
 Haskell tiene un intérprete y un compilador. Saludemos al mundo
 primero desde el intérprete. Para ello invocaremos al intérprete desde
@@ -270,7 +270,7 @@ y al pulsar intro tendremos el cortés mensaje:
 
 	Hola ... mundo!
 
-##Ejemplos
+## Ejemplos
 
 Para ejemplificar el uso de Haskell podemos recurrir a funciones
 conocidas ya en los lenguaje imperativos y que produzcan fuerte
@@ -443,7 +443,7 @@ caractéres "--" y para comentar un párrafo de código lo ponemos entre
 	{- este párrafo está comentado
 		por ser sólo una explicación -}
 
-##Un ejemplo más elaborado
+## Un ejemplo más elaborado
 
 De [D. José E. Labra G.](http://www.x.edu.uy/inet/IntHaskell98.pdf)
 hemos tomado el contenido ligeramente modificado de los ficheros
@@ -658,7 +658,7 @@ la definición del caso: `x + suma (n-1) xs`
 
 Así es Haskell. 
 
-##Nuestro reto habitual
+## Nuestro reto habitual
 
 Esta vez consiste en pensar qué significa el siguiente código Haskell,
 que podríamos poner en nuestro fichero Criba.hs, cargar en el
@@ -683,7 +683,7 @@ No nos emocionemos demasiado, pues aunque es muy elegante no es
 eficiente ni la criba real; es solamente un código de gran valor
 pedagógico.
 
-##Enlaces de interés para saber más por sí mismo
+## Enlaces de interés para saber más por sí mismo
 
 Hemos dado la primera clase. Ahora:
 
