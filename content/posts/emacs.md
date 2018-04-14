@@ -27,7 +27,7 @@ Otros enlaces de interés:
 1. [antonio mario](http://antonio-mario.com/un-poco-de-emacs-iii-comandos-basicos-2/)
 1. [Héctor Mora](http://www.fcaglp.unlp.edu.ar/~observacional/manuales/emacs_man.pdf)
 1. [Manual completo de AUC TeX](ftp://ftp.dante.de/tex-archive/info/spanish/guia-atx/guia-atx.pdf)
-1. [Regular Expression in Emacs Wiki]{https://www.emacswiki.org/emacs/RegularExpression}
+1. [Regular Expression in Emacs Wiki](https://www.emacswiki.org/emacs/RegularExpression)
 
 ## Significado de algunas teclas en la terminología de emacs
 
