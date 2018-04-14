@@ -5,7 +5,6 @@ author =  "M García"
 description = "Cada usuario de `emacs` tiene sus atajos predilectos. A continución enumeramos los nuestros, los que atesoramos, los que más hemos usado con el paso del tiempo."
 tags = ["latex", "emacs"]
 +++
-# 
 ## Introducción
 
 Cada usuario de `emacs` tiene sus atajos predilectos. A continución
@@ -28,6 +27,7 @@ Otros enlaces de interés:
 1. [antonio mario](http://antonio-mario.com/un-poco-de-emacs-iii-comandos-basicos-2/)
 1. [Héctor Mora](http://www.fcaglp.unlp.edu.ar/~observacional/manuales/emacs_man.pdf)
 1. [Manual completo de AUC TeX](ftp://ftp.dante.de/tex-archive/info/spanish/guia-atx/guia-atx.pdf)
+1. [Regular Expression in Emacs Wiki]{https://www.emacswiki.org/emacs/RegularExpression}
 
 ## Significado de algunas teclas en la terminología de emacs
 
@@ -164,6 +164,26 @@ rectángulos se marcan con `C-SCP` y las flecha.
 	M-x lpr-buffer                     (imprimir sin numeración ni cabeceras)
 	M-x print-region                   (imprimir trozo seleccionado con numeración y cabeceras)
 	M-x lpr-region                     (imprimir trozo seleccionado sin numeración ni cabeceras)
+
+## Expresiones Regulares (`regexp`)
+
+	C-M-s                   búsqueda progresiva adelante de coincidencia de expresiones regulares
+	C-M-r                   búsqueda progresiva hacia atrás de coincidencia de expresiones regulares 
+	replace-regexp          reemplaza una cadena que coincide con una expresión regular
+	query-replace-regexp    igual, pero consulta antes de cada reemplazo
+	align-regexp            alinea, usando cadenas que coincidan con expresiones regulares como delimitadores
+	highlight-regexp        resalta cadenas que coincidan con expresiones regulares
+	occur                   muestra líneas que contienen una coincidencia
+	multi-occur             muestra líneas en todos los buffers que contienen una coincidencia
+	how-many                cuenta el número de cadenas que coinciden con la expresión regular
+	keep-lines              eliminar todas las líneas, excepto las que contienen coincidencias
+	flush-lines             elimina las líneas que contienen coincidencias
+	grep                    llama a la orden grep de unix y pone el resultado en un buffer
+	lgrep                   interfaz fácil de usar para la orden grep
+	rgrep                   grep recursivo
+	dired-do-copy-regexp    copia archivos con nombres que coincidan con expresiones regulares
+	dired-do-rename-regexp  renombra archivos que coincidan con la expresión regular
+	find-grep-dired         muestra archivos que contienen coincidencias para expresiones regulares con Dired
 
 ## Varios
 
