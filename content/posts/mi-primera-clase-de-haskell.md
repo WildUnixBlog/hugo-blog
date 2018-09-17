@@ -523,8 +523,8 @@ caractéres "--" y para comentar un párrafo de código lo ponemos entre
 
 De [D. José E. Labra G.](http://www.x.edu.uy/inet/IntHaskell98.pdf)
 hemos tomado el contenido ligeramente modificado de los ficheros
-[Pila.hs](https://wildunix.es/static/files/Pila.hs) y
-[Main.hs](https://wildunix.es/static/files/Main.hs). El
+[Pila.hs](https://wildunix.es/files/Pila.hs) y
+[Main.hs](https://wildunix.es/files/Main.hs). El
 segundo es un ejemplo de menú que importa y opera con los objetos del
 primero.
 
